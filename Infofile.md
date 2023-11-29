@@ -1,10 +1,34 @@
-Schwierigkeitsgrad festlegen
-Random Sudoku wird ausgewählt mit Bezug auf den Schwierigkeitsgrad
+# Sudoku
+- Nutzername (und Passwort) festlegen
+- Hinweise:
+  - 3 pro Spiel
+  - Eine zufällige Zahl einfügen
+  - Überprüfen einer Zahl 
+## Menu
+- Spielen
+  - Schwierigkeitsgrade
+    - einfach
+    - mittel
+    - schwer
+- Einstellungen
+  - (Nutzername und Passwort ändern)
+  - Korrektur / Warnung bei doppelten Zahlen
+    - Nur in Zeile/Spalte/Quadrat
+    - Nur am Ende
+- (Leaderboard)
+
+## Funktionen
+- Endüberprüfung
+- Zwischenüberprüfung
+- Auswahlmöglichkeiten für Schwierigkeitsgrade
+- Hinweise
+- Ausgabe des Spielfeldes
+- Eingabe Verarbeitung
+
+## Database Addons
+- Name und Passwort Login
+- Leaderboard
 
 
-
-Sudoku
-mit Array festlegen
-überprüfung ob richtig oder falsch
-
-hallo linh wie gehts dir
+- gespeicherte Spielstände
+- Währung
