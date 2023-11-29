@@ -1,10 +1,10 @@
-Schwigkeitsgrad festlegen
-Random Sudoku wird ausgewählt mit Bezug auf den Schwirigkeitsgrad
+Schwierigkeitsgrad festlegen
+Random Sudoku wird ausgewählt mit Bezug auf den Schwierigkeitsgrad
 
 
 
-Sudok
+Sudoku
 mit Array festlegen
-überprüfung ob richtig oder flasch
+überprüfung ob richtig oder falsch
 
 hallo linh wie gehts dir
