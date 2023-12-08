@@ -5,9 +5,12 @@ import main.java.com.mms.Board.Board;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
 import java.text.NumberFormat;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -16,6 +19,8 @@ import javax.swing.JTextField;
 import javax.swing.text.NumberFormatter;
 
 public class Main {
+
+    private static JFrame window;
 
     private static Board board;
 
@@ -34,10 +39,9 @@ public class Main {
 
     }
 
-
     private static void createWindow() {
 
-        JFrame window = new JFrame();
+        window = new JFrame();
 
         window.setTitle("Debug Window");
         window.setSize(new Dimension(500, 570));
@@ -109,10 +113,51 @@ public class Main {
 
         body.add(boardLayout);
 
+        JPanel buttonLayout = getjPanel();
+
+        body.add(buttonLayout);
+
         window.add(body);
 
         window.setVisible(true);
 
+    }
+
+    private static JPanel getjPanel() {
+        JPanel buttonLayout = new JPanel(new GridLayout(1, 4, 10, 0));
+        buttonLayout.setPreferredSize(new Dimension(500, 70));
+
+        JButton newButton = new JButton();
+        newButton.setText("New Game");
+        newButton.setMnemonic(KeyEvent.VK_N);
+        newButton.addActionListener(e -> System.out.println("New Game button pressed"));
+
+        buttonLayout.add(newButton);
+
+        JButton submitButton = new JButton();
+        submitButton.setText("Submit");
+        submitButton.setMnemonic(KeyEvent.VK_S);
+        submitButton.addActionListener(e -> System.out.println("Submit button pressed"));
+
+        buttonLayout.add(submitButton);
+
+        JButton clearButton = new JButton();
+        clearButton.setText("Clear Field");
+        clearButton.setMnemonic(KeyEvent.VK_C);
+        clearButton.addActionListener(e -> System.out.println("Clear button pressed"));
+
+        buttonLayout.add(clearButton);
+
+        JButton exitButton = new JButton();
+        exitButton.setText("Exit Game");
+        exitButton.setMnemonic(KeyEvent.VK_E);
+        exitButton.addActionListener(e -> {
+            window.setVisible(false);
+            window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
+        });
+
+        buttonLayout.add(exitButton);
+        return buttonLayout;
     }
 
 }
