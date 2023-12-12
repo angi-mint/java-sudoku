@@ -1,3 +1,5 @@
+package main.java.com.mms.Board;
+
 import java.util.Random;
 
 public class Board {
@@ -191,7 +193,7 @@ public class Board {
         }
     }
 
-    public void generatePuzzle(){
+    public void generatePuzzle() {
         /* Kommentar bitte beim nächsten Commit löschen, und javadoc Kommentar stattdessen hinzufügen
          * Felix & Goetz, Hinweise/Hilfestellungen:
          * size und fullSize verwenden, im Falle eines 3x3 Sudoku, wäre size=3 und fullSize=9 (also 3x3)
