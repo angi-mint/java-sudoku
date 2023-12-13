@@ -18,6 +18,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.text.NumberFormatter;
 
+//nico
+import java.awt.event.ActionEvent;
+
 public class Main {
 
     private static JFrame window;
@@ -28,8 +31,94 @@ public class Main {
 
     private static int fullSize;
 
-    public static void main(String[] args) {
+    //Nico
+private static JLabel nicknameLabel;
+private static JTextField userText;
+private static JLabel difficultyLabel;
+private static JTextField difficultyText;
+private static JLabel difficultylevelLabel;
+private static JButton button;
+private static JPanel loginPanel;
+private static JFrame loginFrame;
 
+    public static void main(String[] args) {
+        
+        // Nico code   
+        loginFrame = new JFrame();
+		loginFrame.setSize(350, 220);
+		loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		loginPanel = new JPanel();
+		loginFrame.add(loginPanel);
+
+		loginPanel.setLayout(null);
+
+		nicknameLabel = new JLabel("Nickname:");
+		nicknameLabel.setBounds(10, 20, 80, 25);
+		loginPanel.add(nicknameLabel);
+
+		userText = new JTextField(20);
+		userText.setBounds(150, 20, 100, 25);
+		loginPanel.add(userText);
+		loginFrame.setVisible(true);
+
+		difficultyLabel = new JLabel("Schwierigkeitsgrad:");
+		difficultyLabel.setBounds(10, 80, 130, 25);
+		loginPanel.add(difficultyLabel);
+
+		difficultylevelLabel = new JLabel("(1)leicht  (2)mittel  (3)schwer");
+		difficultylevelLabel.setBounds(10, 140, 180, 25);
+		loginPanel.add(difficultylevelLabel);
+
+		difficultyText = new JTextField(20);
+		difficultyText.setBounds(150, 80, 100, 25);
+		loginPanel.add(difficultyText);
+		loginFrame.setVisible(true);
+
+		button = new JButton("START");
+		button.setBounds(200, 140, 80, 25);
+		loginPanel.add(button);
+		button.addActionListener(new Login());
+
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// immer bei Klick des START Knopfs
+		String nickname = userText.getText();
+		String difficulty = difficultyText.getText();
+		
+
+		for (int i =  0; i < 1; i++) {
+
+			String difficultySelection = difficulty;
+			if (difficulty.equalsIgnoreCase("leicht")||difficulty.equals("1")||difficulty.equalsIgnoreCase("(1)leicht")){
+				difficultySelection = "leichteste Stufe";
+				System.out.println("Willkommen bei SUDOKU "+nickname+"!\nDu hast die "+difficultySelection+" ausgewählt, viel Erfolg!");
+				loginFrame.setVisible(false);
+				break;
+			}else if(difficulty.equalsIgnoreCase("mittel")||difficulty.equals("2")||difficulty.equalsIgnoreCase("(2)mittel")) {
+				difficultySelection = "mittlere Stufe";
+				System.out.println("Willkommen bei SUDOKU "+nickname+"!\nDu hast die "+difficultySelection+" ausgewählt, viel Erfolg!");
+				loginFrame.setVisible(false);
+				break;
+			}else if (difficulty.equalsIgnoreCase("schwer")||difficulty.equalsIgnoreCase("3")||difficulty.equalsIgnoreCase("(3)achwer")) {
+				difficultySelection = "schwerste Stufe";
+				System.out.println("Willkommen bei SUDOKU "+nickname+"!\nDu hast die "+difficultySelection+" ausgewählt, viel Erfolg!");
+				loginFrame.setVisible(false);
+				break;
+			}else {
+				System.out.println("Überprüfe deine Eingabe, einer der folgenden Werte muss enthalten sein: leicht / mittel / schwer");
+			}
+		}
+		
+	}
+	public void Banner() {
+		
+	}
+
+    
+            
+        
         board = new Board(3);
         board.generateBoard();
         size = board.getSize();
