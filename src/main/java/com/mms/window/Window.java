@@ -13,7 +13,7 @@ public class Window {
 
     private JFrame window;
 
-    private JPanel grid;
+    private JPanel grid, menu;
 
     private int size;
 
@@ -25,6 +25,8 @@ public class Window {
         this.difficulty = 0.3;
 
         this.window = createWindow();
+        this.menu = createMenu();
+        this.window.add(menu);
         this.window.revalidate();
         this.window.repaint();
 
@@ -125,6 +127,83 @@ public class Window {
         body.add(buttonLayout);
 
         return body;
+
+    }
+
+    private JPanel createMenu() {
+        JPanel login = new JPanel();
+
+        login.setLayout(null);
+
+        JLabel nickLabel = new JLabel("Nickname:");
+        nickLabel.setBounds(10, 20, 80, 25);
+        login.add(nickLabel);
+
+        JTextField nickTextField = new JTextField(20);
+        nickTextField.setBounds(100, 20, 100, 25);
+        login.add(nickTextField);
+
+        JLabel gridSizeLabel = new JLabel("Grid Size:");
+        gridSizeLabel.setBounds(10,80,400,25);
+        login.add(gridSizeLabel);
+
+        JButton two = new JButton("2x2");
+        two.setBounds(10, 120, 80,25);
+        two.addActionListener(e -> {
+            size = 2;
+            System.out.println(size);
+        });
+        login.add(two);
+
+        JButton three = new JButton("3x3");
+        three.setBounds(100, 120, 80,25);
+        three.addActionListener(e -> {
+            size = 3;
+            System.out.println(size);
+        });
+        login.add(three);
+
+        JLabel difficultyLabel = new JLabel("Difficulty:");
+        difficultyLabel.setBounds(10,160,400,25);
+        login.add(difficultyLabel);
+
+        JButton easyButton = new JButton("EASY");
+        easyButton.setBounds(10, 200, 80,25);
+        easyButton.addActionListener(e -> {
+            difficulty = 0.3;
+            System.out.println(difficulty);
+        });
+        login.add(easyButton);
+
+        JButton middleButton = new JButton("MIDDLE");
+        middleButton.setBounds(100, 200, 80,25);
+        middleButton.addActionListener(e -> {
+            difficulty = 0.5;
+            System.out.println(difficulty);
+        });
+        login.add(middleButton);
+
+        JButton hardButton = new JButton("HARD");
+        hardButton.setBounds(190, 200, 80,25);
+        hardButton.addActionListener(e -> {
+            difficulty = 0.7;
+            System.out.println(difficulty);
+        });
+        login.add(hardButton);
+
+        JButton startButton = new JButton("START");
+        startButton.setBounds(10, 240, 80, 25);
+        startButton.addActionListener(e -> {
+
+            this.menu.setVisible(false);
+            this.grid = createGrid(size);
+            this.window.add(grid);
+
+            this.grid.setVisible(true);
+        });
+        login.add(startButton);
+
+        return login;
 
     }
 
