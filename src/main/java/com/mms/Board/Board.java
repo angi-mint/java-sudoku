@@ -1,4 +1,4 @@
-package main.java.com.mms.Board;
+package main.java.com.mms.board;
 
 import java.util.Random;
 
@@ -16,10 +16,13 @@ public class Board {
 
     /* GETTER AND SETTER */
 
-    /** Sets the size of the sudoku grid.
+    /**
+     * Sets the size of the sudoku grid.
      *
-     * @param size The size to be set for the Sudoku grid (number of rows/columns in a subgrid).
-     * @return {@code true} if the size is valid and set successfully, {@code false} otherwise.
+     * @param size The size to be set for the Sudoku grid (number of rows/columns in
+     *             a subgrid).
+     * @return {@code true} if the size is valid and set successfully, {@code false}
+     *         otherwise.
      */
     public boolean setSize(int size) {
         if (size < 1) {
@@ -32,7 +35,8 @@ public class Board {
         return true;
     }
 
-    /** Retrieves the size of the Sudoku grid.
+    /**
+     * Retrieves the size of the Sudoku grid.
      *
      * @return The size of the Sudoku grid (number of rows/columns in a subgrid).
      */
@@ -41,18 +45,23 @@ public class Board {
         return this.size;
 
     }
-    /** Retrieves the value at the specified coordinates (x, y) on the Sudoku board.
+
+    /**
+     * Retrieves the value at the specified coordinates (x, y) on the Sudoku board.
      *
      * @param x The x-coordinate representing the row index.
      * @param y The y-coordinate representing the column index.
-     * @return The numerical value present at the given coordinates on the Sudoku board.
+     * @return The numerical value present at the given coordinates on the Sudoku
+     *         board.
      */
-    public int getValue(int x, int y) {
+    public int getValue(int y, int x) {
 
         return this.board[y][x].getValue();
 
     }
-    /** Retrieves the current values present on the Sudoku board.
+
+    /**
+     * Retrieves the current values present on the Sudoku board.
      *
      * @return A 2D array representing the numerical values of the Sudoku board.
      *         Each cell contains the value of the corresponding cell on the board.
@@ -73,11 +82,14 @@ public class Board {
 
     }
 
-    /** Retrieves the visibility status of a cell at the specified coordinates (x, y) on the Sudoku board.
+    /**
+     * Retrieves the visibility status of a cell at the specified coordinates (x, y)
+     * on the Sudoku board.
      *
      * @param x The x-coordinate representing the row index.
      * @param y The y-coordinate representing the column index.
-     * @return {@code true} if the cell at the given coordinates is visible, {@code false} otherwise.
+     * @return {@code true} if the cell at the given coordinates is visible,
+     *         {@code false} otherwise.
      */
     public boolean getVisibility(int x, int y) {
 
@@ -85,10 +97,13 @@ public class Board {
 
     }
 
-    /** Retrieves the visibility statuses of cells on the Sudoku board.
+    /**
+     * Retrieves the visibility statuses of cells on the Sudoku board.
      *
-     * @return A 2D array indicating the visibility status of each cell on the board.
-     *         Each cell in the array is {@code true} if the corresponding cell on the board is visible,
+     * @return A 2D array indicating the visibility status of each cell on the
+     *         board.
+     *         Each cell in the array is {@code true} if the corresponding cell on
+     *         the board is visible,
      *         and {@code false} otherwise.
      */
     public boolean[][] getVisibilities() {
@@ -109,8 +124,10 @@ public class Board {
 
     /* GENERAL FUNCTIONS */
 
-    /** Generates an empty Sudoku board with all cells initialized to zero.
-     * Creates a 2D array of Field objects representing the Sudoku board and sets each cell's value to zero.
+    /**
+     * Generates an empty Sudoku board with all cells initialized to zero.
+     * Creates a 2D array of Field objects representing the Sudoku board and sets
+     * each cell's value to zero.
      */
     private void generateEmptyBoard() {
         this.board = new Field[this.fullSize][this.fullSize];
@@ -121,12 +138,15 @@ public class Board {
         }
     }
 
-    /** Generates a Sudoku board by filling it with values according to Sudoku rules.
+    /**
+     * Generates a Sudoku board by filling it with values according to Sudoku rules.
      * Uses a randomized approach to populate the board with valid values.
      * It repeatedly attempts to fill the board with values while ensuring validity.
-     * If successful, the method stops; otherwise, it continues until a valid solution is found.
+     * If successful, the method stops; otherwise, it continues until a valid
+     * solution is found.
      */
     public void generateBoard() {
+
         Random random = new Random();
         while (true) {
 
@@ -137,10 +157,15 @@ public class Board {
 
             boolean success = true;
 
-
             for (int it = 0; it < this.fullSize * this.fullSize; it++) {
 
-                int[][] possibleValuesArray = updatePossibleValues();
+                this.board = updatePossibleValues(this.board);
+                int[][] possibleValuesArray = new int[this.fullSize * this.fullSize][];
+                for (int i = 0; i < this.board.length; i++) {
+                    for (int j = 0; j < this.board.length; j++) {
+                        possibleValuesArray[i * this.board.length + j] = this.board[i][j].getPossibleValues();
+                    }
+                }
                 Field[] boardArray = to1DArray(this.board);
 
                 int smallest = this.fullSize;
@@ -191,9 +216,16 @@ public class Board {
                 break;
             }
         }
+
     }
 
-    public void generatePuzzle() {
+    /**
+     * Generates a puzzle of the specified difficulty by removing fields from the board.
+     *
+     * @param difficulty The difficulty level of the puzzle, a double value ranging from 0 to 1.
+     *                   0 indicates easier puzzles, while 1 represents more challenging ones.
+     */
+    public void generatePuzzle(double difficulty) {
         /* Kommentar bitte beim nächsten Commit löschen, und javadoc Kommentar stattdessen hinzufügen
          * Felix & Goetz, Hinweise/Hilfestellungen:
          * size und fullSize verwenden, im Falle eines 3x3 Sudoku, wäre size=3 und fullSize=9 (also 3x3)
@@ -214,7 +246,8 @@ public class Board {
 
         private boolean visibility;
 
-        /** Constructs a Field object with an initial value.
+        /**
+         * Constructs a Field object with an initial value.
          *
          * @param value The initial value assigned to the cell.
          */
@@ -226,7 +259,16 @@ public class Board {
 
         }
 
-        /** Sets the value of the cell.
+        public Field(Field other) {
+
+            setValue(other.value);
+            setPossibleValues(other.possibleValues);
+            setVisibility(other.visibility);
+
+        }
+
+        /**
+         * Sets the value of the cell.
          *
          * @param value The value to set in the cell.
          */
@@ -236,7 +278,8 @@ public class Board {
 
         }
 
-        /** Retrieves the value of the cell.
+        /**
+         * Retrieves the value of the cell.
          *
          * @return The value stored in the cell.
          */
@@ -246,7 +289,8 @@ public class Board {
 
         }
 
-        /** Sets the possible values for the cell.
+        /**
+         * Sets the possible values for the cell.
          *
          * @param possibleValues An array containing possible values for the cell.
          */
@@ -256,7 +300,8 @@ public class Board {
 
         }
 
-        /** Retrieves the possible values for the cell.
+        /**
+         * Retrieves the possible values for the cell.
          *
          * @return An array containing possible values for the cell.
          */
@@ -266,7 +311,8 @@ public class Board {
 
         }
 
-        /** Sets the visibility status of the cell.
+        /**
+         * Sets the visibility status of the cell.
          *
          * @param visibility The visibility status to set for the cell.
          */
@@ -276,7 +322,8 @@ public class Board {
 
         }
 
-        /** Retrieves the visibility status of the cell.
+        /**
+         * Retrieves the visibility status of the cell.
          *
          * @return The visibility status of the cell.
          */
@@ -285,12 +332,42 @@ public class Board {
             return this.visibility;
 
         }
+
     }
 
-    /** Converts a 2D array of Field objects representing the Sudoku board to a 1D array.
+    private Field[][] copyBoard(Field[][] array) {
+
+        Field[][] newArray = new Field[array.length][array.length];
+
+        for (int i = 0; i < array.length; i++) {
+            for (int j = 0; j < array[0].length; j++) {
+                newArray[i][j] = new Field(array[i][j]);
+            }
+        }
+
+        return newArray;
+
+    }
+
+    private int[] addToArray(int[] array, int value) {
+
+        int[] newArray = new int[array.length + 1];
+
+        System.arraycopy(array, 0, newArray, 0, array.length);
+
+        newArray[array.length] = value;
+
+        return newArray;
+
+    }
+
+    /**
+     * Converts a 2D array of Field objects representing the Sudoku board to a 1D
+     * array.
      *
      * @param array A 2D array of Field objects representing the Sudoku board.
-     * @return A 1D array containing all Field objects from the 2D array in a linear sequence.
+     * @return A 1D array containing all Field objects from the 2D array in a linear
+     *         sequence.
      */
     private Board.Field[] to1DArray(Board.Field[][] array) {
 
@@ -305,10 +382,14 @@ public class Board {
 
     }
 
-    /** Converts a linear index to 2D coordinates representing a cell's position on the Sudoku board.
+    /**
+     * Converts a linear index to 2D coordinates representing a cell's position on
+     * the Sudoku board.
      *
-     * @param index The linear index representing the position of a cell in the 1D representation of the board.
-     * @return An array of two integers representing the row and column coordinates of the cell on the board.
+     * @param index The linear index representing the position of a cell in the 1D
+     *              representation of the board.
+     * @return An array of two integers representing the row and column coordinates
+     *         of the cell on the board.
      */
     private int[] indexToCoordinates(int index) {
 
@@ -321,19 +402,21 @@ public class Board {
 
     }
 
-    /** Updates the possible values for each cell on the Sudoku board based on current cell values and constraints.
+    /**
+     * Updates the possible values for each cell on the Sudoku board based on
+     * current cell values and constraints.
      *
-     * @return A 2D array representing the possible values for each cell on the board.
-     *         Each element of the array contains an array of possible values for the corresponding cell.
+     * @return A 2D array representing the possible values for each cell on the
+     *         board.
+     *         Each element of the array contains an array of possible values for
+     *         the corresponding cell.
      */
-    private int[][] updatePossibleValues() {
-
-        int[][] possibleValuesArray = new int[this.fullSize * this.fullSize][];
+    private Field[][] updatePossibleValues(Field[][] board) {
 
         for (int i = 0; i < this.fullSize; i++) {
             for (int j = 0; j < this.fullSize; j++) {
 
-                Board.Field field = this.board[i][j];
+                Field field = board[i][j];
 
                 int[] possibleValues = new int[1];
 
@@ -351,7 +434,7 @@ public class Board {
 
                     }
 
-                    for (Board.Field k : this.board[i]) {
+                    for (Field k : board[i]) {
                         int value = k.getValue();
                         if (value != 0) {
                             if (possibleValues.length < 1) {
@@ -363,7 +446,7 @@ public class Board {
                     }
 
                     for (int k = 0; k < this.fullSize; k++) {
-                        int value = this.board[k][j].getValue();
+                        int value = board[k][j].getValue();
                         if (value != 0) {
                             if (possibleValues.length < 1) {
                                 possibleValues = new int[0];
@@ -378,7 +461,7 @@ public class Board {
 
                     for (int k = 0; k < this.size; k++) {
                         for (int l = 0; l < this.size; l++) {
-                            int value = this.board[k + y][l + x].getValue();
+                            int value = board[k + y][l + x].getValue();
                             if (value != 0) {
                                 if (possibleValues.length < 1) {
                                     possibleValues = new int[0];
@@ -391,22 +474,24 @@ public class Board {
 
                 }
 
-                this.board[i][j].setPossibleValues(possibleValues);
-                possibleValuesArray[i * this.fullSize + j] = possibleValues;
+                board[i][j].setPossibleValues(possibleValues);
 
             }
         }
 
-        return possibleValuesArray;
+        return board;
 
     }
 
     /**
-     * Removes a specified element from an integer array and returns a new array without that element.
+     * Removes a specified element from an integer array and returns a new array
+     * without that element.
      *
-     * @param array  The input integer array from which the element needs to be removed.
+     * @param array  The input integer array from which the element needs to be
+     *               removed.
      * @param number The element to be removed from the array.
-     * @return An updated array without the specified element. If the element doesn't exist, the original array is returned.
+     * @return An updated array without the specified element. If the element
+     *         doesn't exist, the original array is returned.
      */
     private int[] RemoveArrayElement(int[] array, int number) {
 
@@ -414,9 +499,9 @@ public class Board {
         int counter = 0;
 
         try {
-            for (int j : array) {
-                if (!(j == number)) {
-                    newArray[counter] = j;
+            for (int i = 0; i < array.length; i++) {
+                if (array[i] != number) {
+                    newArray[counter] = array[i];
                     counter++;
                 }
             }
@@ -432,7 +517,7 @@ public class Board {
      * Prints the current state of the Sudoku board to the console.
      * The board is displayed with grid lines and cell values in the console output.
      */
-    public void printBoard() {
+    public void printBoard(Field[][] board) {
 
         for (int i = 0; i < this.fullSize; i++) {
 
@@ -448,7 +533,11 @@ public class Board {
                 if (j % this.size == 0 && j != 0) {
                     System.out.print("   |");
                 }
-                System.out.print(" " + this.board[i][j].getValue() + " |");
+                if (board[i][j].getVisibility() == true) {
+                    System.out.print(" " + board[i][j].getValue() + " |");
+                } else {
+                    System.out.print("   |");
+                }
 
             }
             System.out.println();
@@ -459,8 +548,11 @@ public class Board {
 
     }
 
-    /**  Prints a line segment representing the boundary or separator within the Sudoku board.
-     * The line consists of grid lines and separation markings used to visually divide the board.
+    /**
+     * Prints a line segment representing the boundary or separator within the
+     * Sudoku board.
+     * The line consists of grid lines and separation markings used to visually
+     * divide the board.
      */
     private void linePrinter() {
         System.out.print("+");
