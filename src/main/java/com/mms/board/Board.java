@@ -335,6 +335,12 @@ public class Board {
 
     }
 
+    /**
+     * Creates a deep copy of a 2D array of Field objects.
+     *
+     * @param array The original 2D array of Field objects to be copied.
+     * @return A new 2D array containing copies of the Field objects from the original array.
+     */
     private Field[][] copyBoard(Field[][] array) {
 
         Field[][] newArray = new Field[array.length][array.length];
@@ -344,18 +350,6 @@ public class Board {
                 newArray[i][j] = new Field(array[i][j]);
             }
         }
-
-        return newArray;
-
-    }
-
-    private int[] addToArray(int[] array, int value) {
-
-        int[] newArray = new int[array.length + 1];
-
-        System.arraycopy(array, 0, newArray, 0, array.length);
-
-        newArray[array.length] = value;
 
         return newArray;
 
