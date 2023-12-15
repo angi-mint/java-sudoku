@@ -226,15 +226,60 @@ public class Board {
      *                   0 indicates easier puzzles, while 1 represents more challenging ones.
      */
     public void generatePuzzle(double difficulty) {
-        /* Kommentar bitte beim nächsten Commit löschen, und javadoc Kommentar stattdessen hinzufügen
-         * Felix & Goetz, Hinweise/Hilfestellungen:
-         * size und fullSize verwenden, im Falle eines 3x3 Sudoku, wäre size=3 und fullSize=9 (also 3x3)
-         * this.board ändern, um das Puzzle zu generieren.
-         * rausstreichen der Werte: visibility auf false setzen, mit this.board[y][x].setVisibility(false);
-         * wichtig für das Backtracking:
-         *    updatePossibleValues: possible Values vom Board updaten, mit this.board[y][x].getPossibleValues();
-         * this.board[y][x].getValue();
-         */
+
+        final Random random = new Random();
+
+        final int fieldsToRemove = ((int) (this.fullSize * this.fullSize * difficulty + 0.5)) / 2;
+        int removedCounter = 0;
+        final int halfSize = (int) (this.fullSize * this.fullSize * 0.5 + 0.5);
+
+        int[] indexArray = new int[halfSize];
+        for (int i = 0; i < indexArray.length; i++) {
+            indexArray[i] = i;
+        }
+
+        while (true) {
+
+            Field[][] boardCopy = copyBoard(this.board);
+
+            int index = indexArray[random.nextInt(indexArray.length)];
+            int symIndex = this.fullSize * this.fullSize - 1 - index;
+            int[] coordinate = indexToCoordinates(index);
+            int[] symCoordinate = indexToCoordinates(symIndex);
+
+            boardCopy[coordinate[1]][coordinate[0]].setValue(0);
+            boardCopy[symCoordinate[1]][symCoordinate[0]].setValue(0);
+
+            Field[][] solveBoardCopy = copyBoard(boardCopy);
+
+            boolean valid = true;
+
+            outer_loop: while (true) {
+
+                solveBoardCopy = updatePossibleValues(solveBoardCopy);
+
+                for (int i = 0; i < solveBoardCopy.length; i++) {
+                    for (int j = 0; j < solveBoardCopy.length; j++) {
+
+                        if (solveBoardCopy[i][j].getValue() == 0) {
+                            int[] possibleValues = solveBoardCopy[i][j].getPossibleValues();
+
+                            if (possibleValues.length == 0) {
+                                valid = false;
+                                break outer_loop;
+                            } else if (possibleValues.length == 1) {
+                                solveBoardCopy[i][j].setValue(possibleValues[0]);
+                                continue outer_loop;
+                            }
+                        }
+
+                    }
+                }
+
+            }
+
+        }
+
     }
 
     /* HELPER FUNCTIONS */
