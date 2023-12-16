@@ -46,6 +46,15 @@ public class Window {
         window.setResizable(false);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setLocationRelativeTo(null);
+
+        try {
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            SwingUtilities.updateComponentTreeUI(window);
+        }
+        catch(Exception ex) {
+
+        }
+
         window.setVisible(true);
 
         return window;
