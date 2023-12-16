@@ -6,10 +6,8 @@ import javax.swing.*;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.event.WindowEvent;
 import java.text.NumberFormat;
 import java.text.ParseException;
-
 
 public class Window {
 
@@ -160,7 +158,7 @@ public class Window {
         login.add(nickTextField);
 
         JLabel gridSizeLabel = new JLabel("Grid Size:");
-        gridSizeLabel.setBounds(10,80,400,25);
+        gridSizeLabel.setBounds(10, 80, 400, 25);
         login.add(gridSizeLabel);
 
         JButton two = new JButton("2x2");
@@ -180,11 +178,11 @@ public class Window {
         login.add(three);
 
         JLabel difficultyLabel = new JLabel("Difficulty:");
-        difficultyLabel.setBounds(10,160,400,25);
+        difficultyLabel.setBounds(10, 160, 400, 25);
         login.add(difficultyLabel);
 
         JButton easyButton = new JButton("EASY");
-        easyButton.setBounds(10, 200, 80,25);
+        easyButton.setBounds(10, 200, 80, 25);
         easyButton.addActionListener(e -> {
             difficulty = 0.3;
             System.out.println(difficulty);
@@ -192,7 +190,7 @@ public class Window {
         login.add(easyButton);
 
         JButton middleButton = new JButton("MIDDLE");
-        middleButton.setBounds(100, 200, 80,25);
+        middleButton.setBounds(100, 200, 80, 25);
         middleButton.addActionListener(e -> {
             difficulty = 0.5;
             System.out.println(difficulty);
@@ -200,7 +198,7 @@ public class Window {
         login.add(middleButton);
 
         JButton hardButton = new JButton("HARD");
-        hardButton.setBounds(190, 200, 80,25);
+        hardButton.setBounds(190, 200, 80, 25);
         hardButton.addActionListener(e -> {
             difficulty = 0.7;
             System.out.println(difficulty);
@@ -244,7 +242,53 @@ public class Window {
         JButton submitButton = new JButton();
         submitButton.setText("Submit");
         submitButton.setMnemonic(KeyEvent.VK_S);
-        submitButton.addActionListener(e -> System.out.println("Submit button pressed"));
+        submitButton.addActionListener(e -> {
+
+            int[][] numberField = new int[this.fullSize][this.fullSize];
+            boolean success = true;
+
+            outer_loop: for (int i = 0; i < this.fullSize; i++) {
+                for (int j = 0; j < this.fullSize; j++) {
+
+                    Component component = this.boardFields[i][j].getComponents()[0];
+
+                    if (component instanceof JTextField) {
+
+                        JTextField textField = (JTextField) component;
+                        try {
+
+                            numberField[i][j] = Integer.parseInt(textField.getText());
+
+                        } catch (Exception ex) {
+
+                            success = false;
+                            break outer_loop;
+
+                        }
+
+                    } else if (component instanceof JLabel) {
+
+                        JLabel label = (JLabel) component;
+                        numberField[i][j] = Integer.parseInt(label.getText());
+
+                    }
+
+                }
+
+            }
+            if (success) {
+                boolean valid = validator(numberField);
+                if (valid) {
+                    System.out.println("Success");
+                } else {
+                    System.out.println("Failed");
+                }
+            } else {
+                System.out.println("Not filled out");
+            }
+            System.out.println("Submit button pressed");
+
+        });
         buttonLayout.add(submitButton);
 
         JButton clearButton = new JButton();
@@ -252,15 +296,17 @@ public class Window {
         clearButton.setMnemonic(KeyEvent.VK_C);
         clearButton.addActionListener(e -> {
             System.out.println("Clear button pressed");
-            
-            for (JPanel[] containerRow : this.boardFields ) {
-                for (JPanel container : containerRow ) {
+
+            for (JPanel[] containerRow : this.boardFields) {
+                for (JPanel container : containerRow) {
+
                     Component component = container.getComponents()[0];
 
-                    if (component instanceof JTextField ) {
+                    if (component instanceof JTextField) {
 
-                        JTextField textfield = (JTextField) component;
-                        textfield.setText(null);
+                        JTextField textField = (JTextField) component;
+                        textField.setText(null);
+
                     }
 
                 }
@@ -268,7 +314,6 @@ public class Window {
 
         });
         buttonLayout.add(clearButton);
-
 
         JButton exitButton = new JButton();
         exitButton.setText("Exit Game");
@@ -287,4 +332,9 @@ public class Window {
 
     }
 
+    private boolean validator(int[][] numberField) {
+        //Schreibe den Validator in dieses Gerüst lg Tic tac und toe ;)
+
+       return true;
+    }
 }
