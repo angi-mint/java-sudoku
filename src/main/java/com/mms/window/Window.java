@@ -259,8 +259,10 @@ public class Window {
         exitButton.setText("Exit Game");
         exitButton.setMnemonic(KeyEvent.VK_E);
         exitButton.addActionListener(e -> {
-            window.setVisible(false);
-            window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
+
+            this.grid.setVisible(false);
+            this.window.add(menu);
+            this.menu.setVisible(true);
         });
         buttonLayout.add(exitButton);
 
