@@ -261,8 +261,10 @@ public class Window {
         exitButton.addActionListener(e -> {
 
             this.grid.setVisible(false);
-            this.window.add(menu);
             this.menu.setVisible(true);
+            this.window.revalidate();
+            this.window.repaint();
+
         });
         buttonLayout.add(exitButton);
 
