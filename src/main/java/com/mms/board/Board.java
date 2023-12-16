@@ -276,6 +276,35 @@ public class Board {
                     }
                 }
 
+                for (int i = 0; i < solveBoardCopy.length; i++) {
+                    for (int j = 0; j < solveBoardCopy.length; j++) {
+
+                        if (solveBoardCopy[i][j].getValue() == 0) {
+
+                            valid = false;
+                            break outer_loop;
+
+                        }
+
+                    }
+                }
+
+                break;
+
+            }
+
+            if (valid) {
+                this.board = copyBoard(boardCopy);
+
+                removedCounter++;
+                if (removedCounter >= fieldsToRemove) {
+                    break;
+                }
+            }
+            indexArray = RemoveArrayElement(indexArray, index);
+
+            if (indexArray.length == 0) {
+                break;
             }
 
         }
