@@ -8,20 +8,27 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.text.NumberFormat;
+import java.text.ParseException;
+
 
 public class Window {
 
     private JFrame window;
 
     private JPanel grid, menu;
+    private JPanel[][] boardFields;
 
     private int size;
+    private int fullSize;
 
     private double difficulty;
+
+    private Board board;
 
     public Window() {
 
         this.size = 3;
+        this.fullSize = this.size * this.size;
         this.difficulty = 0.3;
 
         this.window = createWindow();
@@ -47,15 +54,13 @@ public class Window {
 
     }
 
-    private JPanel createGrid(int size) {
+    private JPanel createGrid() {
 
-        Board board = new Board(size);
+        this.board = new Board(size);
         System.out.println("Generating Puzzle");
         board.generateBoard();
-        board.generatePuzzle(difficulty);
+        board.generatePuzzle(this.difficulty);
         System.out.println("Generated");
-
-        int fullSize = size * size;
 
         JPanel body = new JPanel();
         body.setVisible(false);
@@ -66,16 +71,18 @@ public class Window {
         boardLayout.setBackground(Color.BLACK);
         boardLayout.setPreferredSize(new Dimension(500, 500));
 
-        JPanel[][] segmentLayouts = new JPanel[size][size];
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
+        JPanel[][] segmentLayouts = new JPanel[this.size][this.size];
+        for (int i = 0; i < this.size; i++) {
+            for (int j = 0; j < this.size; j++) {
                 segmentLayouts[i][j] = new JPanel(new GridLayout(size, size, 2, 2));
                 segmentLayouts[i][j].setBackground(Color.BLACK);
             }
         }
 
-        for (int i = 0; i < fullSize; i++) {
-            for (int j = 0; j < fullSize; j++) {
+        this.boardFields = new JPanel[this.fullSize][this.fullSize];
+
+        for (int i = 0; i < this.fullSize; i++) {
+            for (int j = 0; j < this.fullSize; j++) {
 
                 JPanel fieldLayout = new JPanel(new GridLayout(1, 1));
                 fieldLayout.setBackground(Color.WHITE);
@@ -94,11 +101,18 @@ public class Window {
 
                     NumberFormat intFormat = NumberFormat.getIntegerInstance();
 
-                    NumberFormatter numberFormatter = new NumberFormatter(intFormat);
+                    NumberFormatter numberFormatter = new NumberFormatter(intFormat) {
+                        @Override
+                        public Object stringToValue(String text) throws ParseException {
+                            if (text.isEmpty())
+                                return null;
+                            return super.stringToValue(text);
+                        }
+                    };
                     numberFormatter.setValueClass(Integer.class);
                     numberFormatter.setAllowsInvalid(true);
                     numberFormatter.setMinimum(1);
-                    numberFormatter.setMaximum(fullSize);
+                    numberFormatter.setMaximum(this.fullSize);
 
                     JFormattedTextField input = new JFormattedTextField(numberFormatter);
                     input.setFont(input.getFont().deriveFont(25.0f));
@@ -109,7 +123,9 @@ public class Window {
 
                 }
 
-                segmentLayouts[i / size][j / size].add(fieldLayout);
+                boardFields[i][j] = fieldLayout;
+
+                segmentLayouts[i / this.size][j / this.size].add(fieldLayout);
 
             }
         }
@@ -148,18 +164,18 @@ public class Window {
         login.add(gridSizeLabel);
 
         JButton two = new JButton("2x2");
-        two.setBounds(10, 120, 80,25);
+        two.setBounds(10, 120, 80, 25);
         two.addActionListener(e -> {
-            size = 2;
-            System.out.println(size);
+            this.size = 2;
+            this.fullSize = this.size * this.size;
         });
         login.add(two);
 
         JButton three = new JButton("3x3");
-        three.setBounds(100, 120, 80,25);
+        three.setBounds(100, 120, 80, 25);
         three.addActionListener(e -> {
-            size = 3;
-            System.out.println(size);
+            this.size = 3;
+            this.fullSize = this.size * this.size;
         });
         login.add(three);
 
@@ -196,7 +212,7 @@ public class Window {
         startButton.addActionListener(e -> {
 
             this.menu.setVisible(false);
-            this.grid = createGrid(size);
+            this.grid = createGrid();
             this.window.add(grid);
 
             this.grid.setVisible(true);
@@ -216,13 +232,12 @@ public class Window {
         newButton.setMnemonic(KeyEvent.VK_N);
         newButton.addActionListener(e -> {
             this.window.remove(grid);
-            this.grid = createGrid(size);
+            this.grid = createGrid();
             this.window.add(grid);
             this.grid.setVisible(true);
             this.window.revalidate();
             this.window.repaint();
-
-            System.out.println("New Game created");
+            System.out.println("New Game button pressed");
         });
         buttonLayout.add(newButton);
 
@@ -235,7 +250,9 @@ public class Window {
         JButton clearButton = new JButton();
         clearButton.setText("Clear Field");
         clearButton.setMnemonic(KeyEvent.VK_C);
-        clearButton.addActionListener(e -> System.out.println("Clear button pressed"));
+        clearButton.addActionListener(e -> {
+            System.out.println("Clear button pressed");
+        });
         buttonLayout.add(clearButton);
 
         JButton exitButton = new JButton();
