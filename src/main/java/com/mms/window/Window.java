@@ -252,8 +252,23 @@ public class Window {
         clearButton.setMnemonic(KeyEvent.VK_C);
         clearButton.addActionListener(e -> {
             System.out.println("Clear button pressed");
+            
+            for (JPanel[] containerRow : this.boardFields ) {
+                for (JPanel container : containerRow ) {
+                    Component component = container.getComponents()[0];
+
+                    if (component instanceof JTextField ) {
+
+                        JTextField textfield = (JTextField) component;
+                        textfield.setText(null);
+                    }
+
+                }
+            }
+
         });
         buttonLayout.add(clearButton);
+
 
         JButton exitButton = new JButton();
         exitButton.setText("Exit Game");
