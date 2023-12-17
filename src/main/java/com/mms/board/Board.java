@@ -1,3 +1,7 @@
+/**
+ * Represents a Sudoku board with specified size and functionalities to generate and manipulate the board.
+ */
+
 package main.java.com.mms.board;
 
 import java.util.Random;
@@ -10,6 +14,11 @@ public class Board {
 
     private Field[][] board;
 
+    /**
+     * Constructs a Sudoku board with the given size.
+     *
+     * @param size The size of the Sudoku grid (number of rows/columns in a subgrid).
+     */
     public Board(int size) {
         setSize(size);
     }
@@ -57,7 +66,7 @@ public class Board {
         this.board = new Field[this.fullSize][this.fullSize];
         for (int i = 0; i < this.fullSize; i++) {
             for (int j = 0; j < this.fullSize; j++) {
-                this.board[i][j] = new Board.Field(0);
+                this.board[i][j] = new Field(0);
             }
         }
     }
@@ -403,7 +412,7 @@ public class Board {
 
     }
 
-    private class Field {
+    private static class Field {
 
         private int value;
         private int[] possibleValues;

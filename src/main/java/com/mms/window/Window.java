@@ -1,3 +1,8 @@
+/**
+ * The Window class represents the graphical user interface for a Sudoku game.
+ * It creates and manages the main window, grid layout, menu, and game functionalities.
+ */
+
 package main.java.com.mms.window;
 
 import main.java.com.mms.board.Board;
@@ -11,9 +16,10 @@ import java.text.ParseException;
 
 public class Window {
 
-    private JFrame window;
+    private final JFrame window;
 
-    private JPanel grid, menu;
+    private JPanel grid;
+    private final JPanel menu;
     private JPanel[][] boardFields;
 
     private int size;
@@ -21,10 +27,12 @@ public class Window {
 
     private double difficulty;
 
-    private Board board;
-
     private String nickname;
 
+    /**
+     * Default constructor for the Window class.
+     * Initializes default values for size, difficulty, and creates the window and menu.
+     */
     public Window() {
 
         this.size = 3;
@@ -39,6 +47,13 @@ public class Window {
 
     }
 
+    /**
+     * Creates and configures the main JFrame window for the Sudoku game.
+     * Sets window properties such as title, size, appearance, and default close operation.
+     * Attempts to use the Windows look and feel for the UI, falling back to default if an exception occurs.
+     *
+     * @return The configured JFrame window for the Sudoku game.
+     */
     private JFrame createWindow() {
 
         JFrame window = new JFrame();
@@ -53,7 +68,7 @@ public class Window {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
             SwingUtilities.updateComponentTreeUI(window);
         }
-        catch(Exception ex) {
+        catch(Exception ignored) {
 
         }
 
@@ -63,9 +78,15 @@ public class Window {
 
     }
 
+    /**
+     * Creates and initializes the graphical representation of the Sudoku grid within a JPanel.
+     * Sets up the board layout, generates the Sudoku puzzle, and prepares input fields or labels for each grid cell.
+     *
+     * @return The constructed JPanel containing the Sudoku grid and associated components.
+     */
     private JPanel createGrid() {
 
-        this.board = new Board(size);
+        Board board = new Board(size);
         System.out.println("Generating Puzzle");
         board.generateBoard();
         board.generatePuzzle(this.difficulty);
@@ -155,6 +176,12 @@ public class Window {
 
     }
 
+    /**
+     * Constructs and configures the menu panel for the Sudoku game.
+     * The menu includes options for setting the player's nickname, grid size, difficulty level, and starting the game.
+     *
+     * @return The JPanel representing the constructed menu panel with interactive components for game setup.
+     */
     private JPanel createMenu() {
         JPanel login = new JPanel();
 
@@ -250,7 +277,14 @@ public class Window {
 
     }
 
-
+    /**
+     * Creates and configures a panel layout containing buttons for game interaction.
+     * Includes buttons for starting a new game, submitting the Sudoku solution,
+     * clearing the input fields, and exiting the game.
+     * This Panel is added underneath the grid.
+     *
+     * @return JPanel containing buttons for game control and interaction
+     */
     private JPanel createButtonLayout() {
         JPanel buttonLayout = new JPanel(new GridLayout(1, 4, 10, 0));
         buttonLayout.setPreferredSize(new Dimension(500, 70));
@@ -360,6 +394,13 @@ public class Window {
 
     }
 
+    /**
+     * Generates a message panel based on the validation of the submitted Sudoku solution.
+     * Displays a message indicating success or failure upon checking the solution.
+     * Allows the user to view the game, start a new game, or exit back to the menu.
+     *
+     * @param valid Indicates whether the submitted Sudoku solution is valid (true for success, false for failure).
+     */
     private void createMessage(boolean valid) {
         JPanel message = new JPanel();
         message.setLayout(null);
@@ -443,6 +484,13 @@ public class Window {
 
     }
 
+    /**
+     * Validates the Sudoku solution by checking if the number field meets the game's rules.
+     * (no repeated numbers in rows, columns, or subgrids)
+     *
+     * @param numberField 2D array representing the Sudoku board with values to be validated.
+     * @return True if the provided number field adheres to Sudoku rules, false otherwise.
+     */
     private boolean validator(int[][] numberField) {
 
         for (int i = 0; i < this.fullSize; i++) {
