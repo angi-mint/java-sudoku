@@ -161,19 +161,31 @@ public class Window {
         login.setLayout(null);
 
         JLabel nickLabel = new JLabel("Nickname:");
-        nickLabel.setBounds(10, 20, 80, 25);
+        nickLabel.setBounds(10, 130, 170, 25);
+        nickLabel.setFont(nickLabel.getFont().deriveFont(Font.BOLD,20.0f));
         login.add(nickLabel);
 
         JTextField nickTextField = new JTextField(20);
-        nickTextField.setBounds(100, 20, 100, 25);
+        nickTextField.setBounds(130, 130, 100, 25);
         login.add(nickTextField);
 
         JLabel gridSizeLabel = new JLabel("Grid Size:");
-        gridSizeLabel.setBounds(10, 80, 400, 25);
+        gridSizeLabel.setBounds(10, 205, 400, 25);
+        gridSizeLabel.setFont(gridSizeLabel.getFont().deriveFont(Font.BOLD,20.0f));
         login.add(gridSizeLabel);
 
+        JLabel sudokuLabel = new JLabel("MasterMind Studios");
+        sudokuLabel.setBounds(12, 2, 460, 100);
+        sudokuLabel.setFont(sudokuLabel.getFont().deriveFont(Font.BOLD,40.0f));
+        login.add(sudokuLabel);
+
+        JLabel logoLabel = new JLabel("\uD83D\uDD8A");
+        logoLabel.setBounds(310, 1, 460, 460);
+        logoLabel.setFont(logoLabel.getFont().deriveFont(150.0f));
+        login.add(logoLabel);
+
         JButton two = new JButton("2x2");
-        two.setBounds(10, 120, 80, 25);
+        two.setBounds(10, 235, 50, 50);
         two.addActionListener(e -> {
             this.size = 2;
             this.fullSize = this.size * this.size;
@@ -181,19 +193,20 @@ public class Window {
         login.add(two);
 
         JButton three = new JButton("3x3");
-        three.setBounds(100, 120, 80, 25);
+        three.setBounds(70, 235, 50, 50);
         three.addActionListener(e -> {
             this.size = 3;
             this.fullSize = this.size * this.size;
         });
         login.add(three);
 
-        JLabel difficultyLabel = new JLabel("Difficulty:");
-        difficultyLabel.setBounds(10, 160, 400, 25);
+        JLabel difficultyLabel = new JLabel("Difficulty");
+        difficultyLabel.setBounds(10, 265, 400, 80);
+        difficultyLabel.setFont(difficultyLabel.getFont().deriveFont(Font.BOLD,20.0f));
         login.add(difficultyLabel);
 
         JButton easyButton = new JButton("EASY");
-        easyButton.setBounds(10, 200, 80, 25);
+        easyButton.setBounds(10, 325, 80, 50);
         easyButton.addActionListener(e -> {
             difficulty = 0.3;
             System.out.println(difficulty);
@@ -201,7 +214,7 @@ public class Window {
         login.add(easyButton);
 
         JButton middleButton = new JButton("MIDDLE");
-        middleButton.setBounds(100, 200, 80, 25);
+        middleButton.setBounds(100, 325, 80, 50);
         middleButton.addActionListener(e -> {
             difficulty = 0.5;
             System.out.println(difficulty);
@@ -209,15 +222,15 @@ public class Window {
         login.add(middleButton);
 
         JButton hardButton = new JButton("HARD");
-        hardButton.setBounds(190, 200, 80, 25);
+        hardButton.setBounds(190, 325, 80, 50);
         hardButton.addActionListener(e -> {
-            difficulty = 0.7;
+            difficulty = 1.0;
             System.out.println(difficulty);
         });
         login.add(hardButton);
 
         JButton startButton = new JButton("START");
-        startButton.setBounds(10, 240, 80, 25);
+        startButton.setBounds(10, 420, 464, 100);
         startButton.addActionListener(e -> {
             try {
                 nickname = nickTextField.getText();
@@ -236,6 +249,7 @@ public class Window {
         return login;
 
     }
+
 
     private JPanel createButtonLayout() {
         JPanel buttonLayout = new JPanel(new GridLayout(1, 4, 10, 0));
@@ -379,12 +393,12 @@ public class Window {
         if (valid) {
             bannerMessage = "Congratulations ";
             bannerImage = ("\uD83C\uDFC6");
-            exit.setBounds(100, 190, 120, 40);
-            newGame.setBounds(260, 190, 120, 40);
+            exitGame.setBounds(260, 190, 120, 40);
+            newGame.setBounds(100, 190, 120, 40);
             } else {
-            bannerMessage = "Game Over";
-            exit.setBounds(40, 195, 120, 40);
-            newGame.setBounds(320, 195, 120, 40);
+            bannerMessage = "You Failed";
+            exitGame.setBounds(320, 195, 120, 40);
+            newGame.setBounds(40, 195, 120, 40);
             JButton viewGame = new JButton("View Game");
             viewGame.setBounds(180, 195, 120, 40);
             viewGame.setMnemonic(KeyEvent.VK_V);
@@ -414,7 +428,7 @@ public class Window {
         imageMessage.setBounds(87, 100, 500, 570);
         message.add(imageMessage);
 
-        message.add(exit);
+        message.add(exitGame);
         message.add(newGame);
 
         this.grid.setVisible(false);
