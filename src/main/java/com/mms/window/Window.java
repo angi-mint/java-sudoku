@@ -353,8 +353,28 @@ public class Window {
         String bannerMessage;
         String bannerImage;
 
-        JButton exit = new JButton("Exit Game");
+        JButton exitGame = new JButton("Exit Game");
+        exitGame.setMnemonic(KeyEvent.VK_E);
+        exitGame.addActionListener(e -> {
+
+            this.window.remove(message);
+            this.menu.setVisible(true);
+            this.window.revalidate();
+            this.window.repaint();
+            System.out.println("Exit Game button pressed");
+
+        });
         JButton newGame = new JButton("New Game");
+        newGame.setMnemonic(KeyEvent.VK_N);
+        newGame.addActionListener(e -> {
+            this.window.remove(message);
+            this.grid = createGrid();
+            this.window.add(grid);
+            this.grid.setVisible(true);
+            this.window.revalidate();
+            this.window.repaint();
+            System.out.println("New Game button pressed");
+        });
 
         if (valid) {
             bannerMessage = "Congratulations ";
@@ -367,6 +387,14 @@ public class Window {
             newGame.setBounds(320, 195, 120, 40);
             JButton viewGame = new JButton("View Game");
             viewGame.setBounds(180, 195, 120, 40);
+            viewGame.setMnemonic(KeyEvent.VK_V);
+            viewGame.addActionListener(e -> {
+                this.window.remove(message);
+                this.grid.setVisible(true);
+                this.window.revalidate();
+                this.window.repaint();
+                System.out.println("View Game button pressed");
+            });
             message.add(viewGame);
             bannerImage = ("\uD83D\uDE31");
         }
