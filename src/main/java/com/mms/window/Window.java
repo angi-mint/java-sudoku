@@ -368,6 +368,7 @@ public class Window {
         String bannerImage;
 
         JButton exitGame = new JButton("Exit Game");
+        exitGame.setBounds(320, 195, 120, 40);
         exitGame.setMnemonic(KeyEvent.VK_E);
         exitGame.addActionListener(e -> {
 
@@ -378,7 +379,21 @@ public class Window {
             System.out.println("Exit Game button pressed");
 
         });
+
+        JButton viewGame = new JButton("View Game");
+        viewGame.setBounds(180, 195, 120, 40);
+        viewGame.setMnemonic(KeyEvent.VK_V);
+        viewGame.addActionListener(e -> {
+            this.window.remove(message);
+            this.grid.setVisible(true);
+            this.window.revalidate();
+            this.window.repaint();
+            System.out.println("View Game button pressed");
+        });
+        message.add(viewGame);
+
         JButton newGame = new JButton("New Game");
+        newGame.setBounds(40, 195, 120, 40);
         newGame.setMnemonic(KeyEvent.VK_N);
         newGame.addActionListener(e -> {
             this.window.remove(message);
@@ -393,23 +408,13 @@ public class Window {
         if (valid) {
             bannerMessage = "Congratulations ";
             bannerImage = ("\uD83C\uDFC6");
-            exitGame.setBounds(260, 190, 120, 40);
-            newGame.setBounds(100, 190, 120, 40);
+            JLabel trophyLabel = new JLabel(nickname, SwingConstants.CENTER);
+            trophyLabel.setBounds(210, 462, 50, 80);
+            trophyLabel.setFont(trophyLabel.getFont().deriveFont(Font.BOLD, 10.0f));
+            message.add(trophyLabel);
+
             } else {
             bannerMessage = "You Failed";
-            exitGame.setBounds(320, 195, 120, 40);
-            newGame.setBounds(40, 195, 120, 40);
-            JButton viewGame = new JButton("View Game");
-            viewGame.setBounds(180, 195, 120, 40);
-            viewGame.setMnemonic(KeyEvent.VK_V);
-            viewGame.addActionListener(e -> {
-                this.window.remove(message);
-                this.grid.setVisible(true);
-                this.window.revalidate();
-                this.window.repaint();
-                System.out.println("View Game button pressed");
-            });
-            message.add(viewGame);
             bannerImage = ("\uD83D\uDE31");
         }
 
