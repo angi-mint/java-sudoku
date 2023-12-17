@@ -344,6 +344,44 @@ public class Window {
     private boolean validator(int[][] numberField) {
         //Schreibe den Validator in dieses Gerüst lg Tic tac und toe ;)
 
+        for (int i = 0; i < this.fullSize; i++) {
+            for (int j = 0; j < this.fullSize; j++) {
+
+                int value = numberField[i][j];
+                numberField[i][j] = -1;
+
+                for (int number : numberField[i]) {
+
+                    if (number == value){
+                        return false;
+                    }
+
+                }
+
+                for (int k = 0; k < this.fullSize; k++) {
+                    int number = numberField[k][j];
+                    if (number == value) {
+                        return false;
+                    }
+                }
+
+                int x = j - (j % this.size);
+                int y = i - (i % this.size);
+
+                for (int k = 0; k < this.size; k++) {
+                    for (int l = 0; l < this.size; l++) {
+                        int number = numberField[k + y][l + x];
+
+                        if (number == value) {
+                            return false;
+                        }
+
+                    }
+                }
+                numberField[i][j] = value;
+
+            }
+        }
        return true;
     }
 }
