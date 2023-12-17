@@ -341,6 +341,56 @@ public class Window {
 
     }
 
+    private void createMessage(boolean valid) {
+        JPanel message = new JPanel();
+        message.setLayout(null);
+
+        String bannerMessage;
+        String bannerImage;
+
+        JButton exit = new JButton("Exit Game");
+        JButton newGame = new JButton("New Game");
+
+        if (valid) {
+            bannerMessage = "Congratulations ";
+            bannerImage = ("\uD83C\uDFC6");
+            exit.setBounds(100, 190, 120, 40);
+            newGame.setBounds(260, 190, 120, 40);
+            } else {
+            bannerMessage = "Game Over";
+            exit.setBounds(40, 195, 120, 40);
+            newGame.setBounds(320, 195, 120, 40);
+            JButton viewGame = new JButton("View Game");
+            viewGame.setBounds(180, 195, 120, 40);
+            message.add(viewGame);
+            bannerImage = ("\uD83D\uDE31");
+        }
+
+        JLabel commitMessage = new JLabel(bannerMessage, SwingConstants.CENTER);
+        commitMessage.setBounds(0, 10, 500, 80);
+        commitMessage.setFont(commitMessage.getFont().deriveFont(Font.BOLD,56.0f));
+        message.add(commitMessage);
+
+        JLabel nicknameMessage = new JLabel(nickname, SwingConstants.CENTER);
+        nicknameMessage.setFont(nicknameMessage.getFont().deriveFont(Font.BOLD,56.0f));
+        nicknameMessage.setBounds(0, 100, 500, 60);
+        message.add(nicknameMessage);
+
+        JLabel imageMessage = new JLabel(bannerImage);
+        imageMessage.setFont(imageMessage.getFont().deriveFont(300.0f));
+        imageMessage.setBounds(87, 100, 500, 570);
+        message.add(imageMessage);
+
+        message.add(exit);
+        message.add(newGame);
+
+        this.grid.setVisible(false);
+        this.window.add(message);
+        this.window.revalidate();
+        this.window.repaint();
+
+    }
+
     private boolean validator(int[][] numberField) {
         //Schreibe den Validator in dieses Gerüst lg Tic tac und toe ;)
 
