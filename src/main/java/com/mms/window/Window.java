@@ -6,22 +6,29 @@ import javax.swing.*;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.event.WindowEvent;
 import java.text.NumberFormat;
+import java.text.ParseException;
 
 public class Window {
 
     private JFrame window;
 
     private JPanel grid, menu;
+    private JPanel[][] boardFields;
 
     private int size;
+    private int fullSize;
 
     private double difficulty;
+
+    private Board board;
+
+    private String nickname;
 
     public Window() {
 
         this.size = 3;
+        this.fullSize = this.size * this.size;
         this.difficulty = 0.3;
 
         this.window = createWindow();
@@ -41,21 +48,28 @@ public class Window {
         window.setResizable(false);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setLocationRelativeTo(null);
+
+        try {
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            SwingUtilities.updateComponentTreeUI(window);
+        }
+        catch(Exception ex) {
+
+        }
+
         window.setVisible(true);
 
         return window;
 
     }
 
-    private JPanel createGrid(int size) {
+    private JPanel createGrid() {
 
-        Board board = new Board(size);
+        this.board = new Board(size);
         System.out.println("Generating Puzzle");
         board.generateBoard();
-        board.generatePuzzle(difficulty);
+        board.generatePuzzle(this.difficulty);
         System.out.println("Generated");
-
-        int fullSize = size * size;
 
         JPanel body = new JPanel();
         body.setVisible(false);
@@ -66,16 +80,18 @@ public class Window {
         boardLayout.setBackground(Color.BLACK);
         boardLayout.setPreferredSize(new Dimension(500, 500));
 
-        JPanel[][] segmentLayouts = new JPanel[size][size];
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
+        JPanel[][] segmentLayouts = new JPanel[this.size][this.size];
+        for (int i = 0; i < this.size; i++) {
+            for (int j = 0; j < this.size; j++) {
                 segmentLayouts[i][j] = new JPanel(new GridLayout(size, size, 2, 2));
                 segmentLayouts[i][j].setBackground(Color.BLACK);
             }
         }
 
-        for (int i = 0; i < fullSize; i++) {
-            for (int j = 0; j < fullSize; j++) {
+        this.boardFields = new JPanel[this.fullSize][this.fullSize];
+
+        for (int i = 0; i < this.fullSize; i++) {
+            for (int j = 0; j < this.fullSize; j++) {
 
                 JPanel fieldLayout = new JPanel(new GridLayout(1, 1));
                 fieldLayout.setBackground(Color.WHITE);
@@ -94,11 +110,18 @@ public class Window {
 
                     NumberFormat intFormat = NumberFormat.getIntegerInstance();
 
-                    NumberFormatter numberFormatter = new NumberFormatter(intFormat);
+                    NumberFormatter numberFormatter = new NumberFormatter(intFormat) {
+                        @Override
+                        public Object stringToValue(String text) throws ParseException {
+                            if (text.isEmpty())
+                                return null;
+                            return super.stringToValue(text);
+                        }
+                    };
                     numberFormatter.setValueClass(Integer.class);
                     numberFormatter.setAllowsInvalid(true);
                     numberFormatter.setMinimum(1);
-                    numberFormatter.setMaximum(fullSize);
+                    numberFormatter.setMaximum(this.fullSize);
 
                     JFormattedTextField input = new JFormattedTextField(numberFormatter);
                     input.setFont(input.getFont().deriveFont(25.0f));
@@ -109,7 +132,9 @@ public class Window {
 
                 }
 
-                segmentLayouts[i / size][j / size].add(fieldLayout);
+                boardFields[i][j] = fieldLayout;
+
+                segmentLayouts[i / this.size][j / this.size].add(fieldLayout);
 
             }
         }
@@ -136,39 +161,52 @@ public class Window {
         login.setLayout(null);
 
         JLabel nickLabel = new JLabel("Nickname:");
-        nickLabel.setBounds(10, 20, 80, 25);
+        nickLabel.setBounds(10, 130, 170, 25);
+        nickLabel.setFont(nickLabel.getFont().deriveFont(Font.BOLD,20.0f));
         login.add(nickLabel);
 
         JTextField nickTextField = new JTextField(20);
-        nickTextField.setBounds(100, 20, 100, 25);
+        nickTextField.setBounds(130, 130, 100, 25);
         login.add(nickTextField);
 
         JLabel gridSizeLabel = new JLabel("Grid Size:");
-        gridSizeLabel.setBounds(10,80,400,25);
+        gridSizeLabel.setBounds(10, 205, 400, 25);
+        gridSizeLabel.setFont(gridSizeLabel.getFont().deriveFont(Font.BOLD,20.0f));
         login.add(gridSizeLabel);
 
+        JLabel sudokuLabel = new JLabel("MasterMind Studios");
+        sudokuLabel.setBounds(12, 2, 460, 100);
+        sudokuLabel.setFont(sudokuLabel.getFont().deriveFont(Font.BOLD,40.0f));
+        login.add(sudokuLabel);
+
+        JLabel logoLabel = new JLabel("\uD83D\uDD8A");
+        logoLabel.setBounds(310, 1, 460, 460);
+        logoLabel.setFont(logoLabel.getFont().deriveFont(150.0f));
+        login.add(logoLabel);
+
         JButton two = new JButton("2x2");
-        two.setBounds(10, 120, 80,25);
+        two.setBounds(10, 235, 50, 50);
         two.addActionListener(e -> {
-            size = 2;
-            System.out.println(size);
+            this.size = 2;
+            this.fullSize = this.size * this.size;
         });
         login.add(two);
 
         JButton three = new JButton("3x3");
-        three.setBounds(100, 120, 80,25);
+        three.setBounds(70, 235, 50, 50);
         three.addActionListener(e -> {
-            size = 3;
-            System.out.println(size);
+            this.size = 3;
+            this.fullSize = this.size * this.size;
         });
         login.add(three);
 
-        JLabel difficultyLabel = new JLabel("Difficulty:");
-        difficultyLabel.setBounds(10,160,400,25);
+        JLabel difficultyLabel = new JLabel("Difficulty");
+        difficultyLabel.setBounds(10, 265, 400, 80);
+        difficultyLabel.setFont(difficultyLabel.getFont().deriveFont(Font.BOLD,20.0f));
         login.add(difficultyLabel);
 
         JButton easyButton = new JButton("EASY");
-        easyButton.setBounds(10, 200, 80,25);
+        easyButton.setBounds(10, 325, 80, 50);
         easyButton.addActionListener(e -> {
             difficulty = 0.3;
             System.out.println(difficulty);
@@ -176,7 +214,7 @@ public class Window {
         login.add(easyButton);
 
         JButton middleButton = new JButton("MIDDLE");
-        middleButton.setBounds(100, 200, 80,25);
+        middleButton.setBounds(100, 325, 80, 50);
         middleButton.addActionListener(e -> {
             difficulty = 0.5;
             System.out.println(difficulty);
@@ -184,19 +222,24 @@ public class Window {
         login.add(middleButton);
 
         JButton hardButton = new JButton("HARD");
-        hardButton.setBounds(190, 200, 80,25);
+        hardButton.setBounds(190, 325, 80, 50);
         hardButton.addActionListener(e -> {
-            difficulty = 0.7;
+            difficulty = 1.0;
             System.out.println(difficulty);
         });
         login.add(hardButton);
 
         JButton startButton = new JButton("START");
-        startButton.setBounds(10, 240, 80, 25);
+        startButton.setBounds(10, 420, 464, 100);
         startButton.addActionListener(e -> {
+            try {
+                nickname = nickTextField.getText();
+            } catch (Exception error) {
+                nickname = "Player";
+            }
 
             this.menu.setVisible(false);
-            this.grid = createGrid(size);
+            this.grid = createGrid();
             this.window.add(grid);
 
             this.grid.setVisible(true);
@@ -207,6 +250,7 @@ public class Window {
 
     }
 
+
     private JPanel createButtonLayout() {
         JPanel buttonLayout = new JPanel(new GridLayout(1, 4, 10, 0));
         buttonLayout.setPreferredSize(new Dimension(500, 70));
@@ -216,26 +260,87 @@ public class Window {
         newButton.setMnemonic(KeyEvent.VK_N);
         newButton.addActionListener(e -> {
             this.window.remove(grid);
-            this.grid = createGrid(size);
+            this.grid = createGrid();
             this.window.add(grid);
             this.grid.setVisible(true);
             this.window.revalidate();
             this.window.repaint();
-
-            System.out.println("New Game created");
+            System.out.println("New Game button pressed");
         });
         buttonLayout.add(newButton);
 
         JButton submitButton = new JButton();
         submitButton.setText("Submit");
         submitButton.setMnemonic(KeyEvent.VK_S);
-        submitButton.addActionListener(e -> System.out.println("Submit button pressed"));
+        submitButton.addActionListener(e -> {
+
+            int[][] numberField = new int[this.fullSize][this.fullSize];
+            boolean success = true;
+
+            outer_loop: for (int i = 0; i < this.fullSize; i++) {
+                for (int j = 0; j < this.fullSize; j++) {
+
+                    Component component = this.boardFields[i][j].getComponents()[0];
+
+                    if (component instanceof JTextField textField) {
+
+                        try {
+
+                            numberField[i][j] = Integer.parseInt(textField.getText());
+
+                        } catch (Exception ex) {
+
+                            success = false;
+                            break outer_loop;
+
+                        }
+
+                    } else if (component instanceof JLabel label) {
+
+                        numberField[i][j] = Integer.parseInt(label.getText());
+
+                    }
+
+                }
+
+            }
+            if (success) {
+                boolean valid = validator(numberField);
+                createMessage(valid);
+                if (valid) {
+                    System.out.println("Success");
+                } else {
+                    System.out.println("Failed");
+                }
+            } else {
+                System.out.println("Not filled out");
+            }
+            System.out.println("Submit button pressed");
+
+        });
         buttonLayout.add(submitButton);
 
         JButton clearButton = new JButton();
         clearButton.setText("Clear Field");
         clearButton.setMnemonic(KeyEvent.VK_C);
-        clearButton.addActionListener(e -> System.out.println("Clear button pressed"));
+        clearButton.addActionListener(e -> {
+            System.out.println("Clear button pressed");
+
+            for (JPanel[] containerRow : this.boardFields) {
+                for (JPanel container : containerRow) {
+
+                    Component component = container.getComponents()[0];
+
+                    if (component instanceof JTextField textField) {
+
+                        textField.setText(null);
+
+                    }
+
+                }
+            }
+
+        });
         buttonLayout.add(clearButton);
 
         JButton exitButton = new JButton();
@@ -244,8 +349,10 @@ public class Window {
         exitButton.addActionListener(e -> {
 
             this.grid.setVisible(false);
-            this.window.add(menu);
             this.menu.setVisible(true);
+            this.window.revalidate();
+            this.window.repaint();
+
         });
         buttonLayout.add(exitButton);
 
@@ -253,4 +360,129 @@ public class Window {
 
     }
 
+    private void createMessage(boolean valid) {
+        JPanel message = new JPanel();
+        message.setLayout(null);
+
+        String bannerMessage;
+        String bannerImage;
+
+        JButton exitGame = new JButton("Exit Game");
+        exitGame.setBounds(320, 195, 120, 40);
+        exitGame.setMnemonic(KeyEvent.VK_E);
+        exitGame.addActionListener(e -> {
+
+            this.window.remove(message);
+            this.menu.setVisible(true);
+            this.window.revalidate();
+            this.window.repaint();
+            System.out.println("Exit Game button pressed");
+
+        });
+
+        JButton viewGame = new JButton("View Game");
+        viewGame.setBounds(180, 195, 120, 40);
+        viewGame.setMnemonic(KeyEvent.VK_V);
+        viewGame.addActionListener(e -> {
+            this.window.remove(message);
+            this.grid.setVisible(true);
+            this.window.revalidate();
+            this.window.repaint();
+            System.out.println("View Game button pressed");
+        });
+        message.add(viewGame);
+
+        JButton newGame = new JButton("New Game");
+        newGame.setBounds(40, 195, 120, 40);
+        newGame.setMnemonic(KeyEvent.VK_N);
+        newGame.addActionListener(e -> {
+            this.window.remove(message);
+            this.grid = createGrid();
+            this.window.add(grid);
+            this.grid.setVisible(true);
+            this.window.revalidate();
+            this.window.repaint();
+            System.out.println("New Game button pressed");
+        });
+
+        if (valid) {
+            bannerMessage = "Congratulations ";
+            bannerImage = ("\uD83C\uDFC6");
+            JLabel trophyLabel = new JLabel(nickname, SwingConstants.CENTER);
+            trophyLabel.setBounds(210, 462, 50, 80);
+            trophyLabel.setFont(trophyLabel.getFont().deriveFont(Font.BOLD, 10.0f));
+            message.add(trophyLabel);
+
+            } else {
+            bannerMessage = "You Failed";
+            bannerImage = ("\uD83D\uDE31");
+        }
+
+        JLabel commitMessage = new JLabel(bannerMessage, SwingConstants.CENTER);
+        commitMessage.setBounds(0, 10, 500, 80);
+        commitMessage.setFont(commitMessage.getFont().deriveFont(Font.BOLD,56.0f));
+        message.add(commitMessage);
+
+        JLabel nicknameMessage = new JLabel(nickname, SwingConstants.CENTER);
+        nicknameMessage.setFont(nicknameMessage.getFont().deriveFont(Font.BOLD,56.0f));
+        nicknameMessage.setBounds(0, 100, 500, 60);
+        message.add(nicknameMessage);
+
+        JLabel imageMessage = new JLabel(bannerImage);
+        imageMessage.setFont(imageMessage.getFont().deriveFont(300.0f));
+        imageMessage.setBounds(87, 100, 500, 570);
+        message.add(imageMessage);
+
+        message.add(exitGame);
+        message.add(newGame);
+
+        this.grid.setVisible(false);
+        this.window.add(message);
+        this.window.revalidate();
+        this.window.repaint();
+
+    }
+
+    private boolean validator(int[][] numberField) {
+
+        for (int i = 0; i < this.fullSize; i++) {
+            for (int j = 0; j < this.fullSize; j++) {
+
+                int value = numberField[i][j];
+                numberField[i][j] = -1;
+
+                for (int number : numberField[i]) {
+
+                    if (number == value){
+                        return false;
+                    }
+
+                }
+
+                for (int k = 0; k < this.fullSize; k++) {
+                    int number = numberField[k][j];
+                    if (number == value) {
+                        return false;
+                    }
+                }
+
+                int x = j - (j % this.size);
+                int y = i - (i % this.size);
+
+                for (int k = 0; k < this.size; k++) {
+                    for (int l = 0; l < this.size; l++) {
+                        int number = numberField[k + y][l + x];
+
+                        if (number == value) {
+                            return false;
+                        }
+
+                    }
+                }
+                numberField[i][j] = value;
+
+            }
+        }
+       return true;
+    }
 }
