@@ -23,6 +23,8 @@ public class Window {
 
     private Board board;
 
+    private String nickname;
+
     public Window() {
 
         this.size = 3;
@@ -217,6 +219,11 @@ public class Window {
         JButton startButton = new JButton("START");
         startButton.setBounds(10, 240, 80, 25);
         startButton.addActionListener(e -> {
+            try {
+                nickname = nickTextField.getText();
+            } catch (Exception error) {
+                nickname = "Player";
+            }
 
             this.menu.setVisible(false);
             this.grid = createGrid();
@@ -261,9 +268,8 @@ public class Window {
 
                     Component component = this.boardFields[i][j].getComponents()[0];
 
-                    if (component instanceof JTextField) {
+                    if (component instanceof JTextField textField) {
 
-                        JTextField textField = (JTextField) component;
                         try {
 
                             numberField[i][j] = Integer.parseInt(textField.getText());
@@ -275,9 +281,8 @@ public class Window {
 
                         }
 
-                    } else if (component instanceof JLabel) {
+                    } else if (component instanceof JLabel label) {
 
-                        JLabel label = (JLabel) component;
                         numberField[i][j] = Integer.parseInt(label.getText());
 
                     }
@@ -287,6 +292,7 @@ public class Window {
             }
             if (success) {
                 boolean valid = validator(numberField);
+                createMessage(valid);
                 if (valid) {
                     System.out.println("Success");
                 } else {
@@ -311,9 +317,8 @@ public class Window {
 
                     Component component = container.getComponents()[0];
 
-                    if (component instanceof JTextField) {
+                    if (component instanceof JTextField textField) {
 
-                        JTextField textField = (JTextField) component;
                         textField.setText(null);
 
                     }
@@ -392,7 +397,6 @@ public class Window {
     }
 
     private boolean validator(int[][] numberField) {
-        //Schreibe den Validator in dieses Gerüst lg Tic tac und toe ;)
 
         for (int i = 0; i < this.fullSize; i++) {
             for (int j = 0; j < this.fullSize; j++) {
