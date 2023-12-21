@@ -14,6 +14,10 @@ import java.awt.event.KeyEvent;
 import java.text.NumberFormat;
 import java.text.ParseException;
 
+/**
+ * The Window class represents the graphical user interface (GUI) for the Sudoku game.
+ * It creates and manages the main frame and components for game setup, gameplay, and interaction.
+ */
 public class Window {
 
     private final JFrame window;
@@ -259,10 +263,11 @@ public class Window {
         JButton startButton = new JButton("START");
         startButton.setBounds(10, 420, 464, 100);
         startButton.addActionListener(e -> {
-            try {
-                nickname = nickTextField.getText();
-            } catch (Exception error) {
+            if (nickTextField.getText().isEmpty()) {
                 nickname = "Player";
+            } else {
+                nickname = nickTextField.getText();
+
             }
 
             this.menu.setVisible(false);
@@ -486,7 +491,7 @@ public class Window {
 
     /**
      * Validates the Sudoku solution by checking if the number field meets the game's rules.
-     * (no repeated numbers in rows, columns, or subgrids)
+     * (no repeated numbers in rows, columns, or sub-grids)
      *
      * @param numberField 2D array representing the Sudoku board with values to be validated.
      * @return True if the provided number field adheres to Sudoku rules, false otherwise.
