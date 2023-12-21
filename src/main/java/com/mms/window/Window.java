@@ -1,8 +1,3 @@
-/**
- * The Window class represents the graphical user interface for a Sudoku game.
- * It creates and manages the main window, grid layout, menu, and game functionalities.
- */
-
 package main.java.com.mms.window;
 
 import main.java.com.mms.board.Board;

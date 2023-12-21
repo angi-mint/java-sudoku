@@ -1,11 +1,10 @@
-/**
- * Represents a Sudoku board with specified size and functionalities to generate and manipulate the board.
- */
-
 package main.java.com.mms.board;
 
 import java.util.Random;
 
+/**
+ * Represents a Sudoku board, managing the generation, modification, and manipulation of the game grid.
+ */
 public class Board {
 
     private int size;
@@ -308,6 +307,8 @@ public class Board {
     /**
      * Updates the possible values for each cell on the Sudoku board based on
      * current cell values and constraints.
+     *
+     * @param board a 2D array representing the Sudoku board with fields containing values
      */
     private void updatePossibleValues(Field[][] board) {
 
@@ -412,6 +413,10 @@ public class Board {
 
     }
 
+    /**
+     * Represents a single cell in a Sudoku board, storing its value and possible values.
+     * Used for managing individual cells within the board.
+     */
     private static class Field {
 
         private int value;
@@ -429,6 +434,11 @@ public class Board {
 
         }
 
+        /**
+         * Constructs a new Field object by copying the value and possible values from another Field object.
+         *
+         * @param other The Field object from which the values are copied to create a new Field instance.
+         */
         public Field(Field other) {
 
             setValue(other.value);
