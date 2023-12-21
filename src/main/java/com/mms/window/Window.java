@@ -9,22 +9,56 @@ import java.awt.event.KeyEvent;
 import java.text.NumberFormat;
 import java.text.ParseException;
 
+/**
+ * The Window class represents the graphical user interface (GUI) for the Sudoku game.
+ * It creates and manages the main frame and components for game setup, gameplay, and interaction.
+ */
 public class Window {
 
-    private JFrame window;
+    /**
+     * Represents the main frame of the Sudoku game.
+     */
+    private final JFrame window;
 
-    private JPanel grid, menu;
+    /**
+     * Represents the panel containing the Sudoku grid.
+     */
+    private JPanel grid;
+
+    /**
+     * Represents the panel containing the menu for game setup and start.
+     */
+    private final JPanel menu;
+
+    /**
+     * Represents the matrix of panels forming the Sudoku grid cells.
+     */
     private JPanel[][] boardFields;
 
+    /**
+     * Determines the number of rows/columns in a single subgrid.
+     */
     private int size;
+
+    /**
+     * Represents the full size of the Sudoku board (size * size).
+     */
     private int fullSize;
 
+    /**
+     * Represents the difficulty level of the Sudoku game. (Number between 0-1)
+     */
     private double difficulty;
 
-    private Board board;
-
+    /**
+     * Represents the player's nickname used for personalization in the game.
+     */
     private String nickname;
 
+    /**
+     * Default constructor for the Window class.
+     * Initializes default values for size, difficulty, and creates the window and menu.
+     */
     public Window() {
 
         this.size = 3;
@@ -39,6 +73,13 @@ public class Window {
 
     }
 
+    /**
+     * Creates and configures the main JFrame window for the Sudoku game.
+     * Sets window properties such as title, size, appearance, and default close operation.
+     * Attempts to use the Windows look and feel for the UI, falling back to default if an exception occurs.
+     *
+     * @return The configured JFrame window for the Sudoku game.
+     */
     private JFrame createWindow() {
 
         JFrame window = new JFrame();
@@ -50,10 +91,12 @@ public class Window {
         window.setLocationRelativeTo(null);
 
         try {
+
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
             SwingUtilities.updateComponentTreeUI(window);
+
         }
-        catch(Exception ex) {
+        catch(Exception ignored) {
 
         }
 
@@ -63,9 +106,15 @@ public class Window {
 
     }
 
+    /**
+     * Creates and initializes the graphical representation of the Sudoku grid within a JPanel.
+     * Sets up the board layout, generates the Sudoku puzzle, and prepares input fields or labels for each grid cell.
+     *
+     * @return The constructed JPanel containing the Sudoku grid and associated components.
+     */
     private JPanel createGrid() {
 
-        this.board = new Board(size);
+        Board board = new Board(size);
         System.out.println("Generating Puzzle");
         board.generateBoard();
         board.generatePuzzle(this.difficulty);
@@ -81,16 +130,22 @@ public class Window {
         boardLayout.setPreferredSize(new Dimension(500, 500));
 
         JPanel[][] segmentLayouts = new JPanel[this.size][this.size];
+
         for (int i = 0; i < this.size; i++) {
+
             for (int j = 0; j < this.size; j++) {
+
                 segmentLayouts[i][j] = new JPanel(new GridLayout(size, size, 2, 2));
                 segmentLayouts[i][j].setBackground(Color.BLACK);
+
             }
+
         }
 
         this.boardFields = new JPanel[this.fullSize][this.fullSize];
 
         for (int i = 0; i < this.fullSize; i++) {
+
             for (int j = 0; j < this.fullSize; j++) {
 
                 JPanel fieldLayout = new JPanel(new GridLayout(1, 1));
@@ -111,13 +166,22 @@ public class Window {
                     NumberFormat intFormat = NumberFormat.getIntegerInstance();
 
                     NumberFormatter numberFormatter = new NumberFormatter(intFormat) {
+
                         @Override
                         public Object stringToValue(String text) throws ParseException {
-                            if (text.isEmpty())
+
+                            if (text.isEmpty()) {
+
                                 return null;
+
+                            }
+
                             return super.stringToValue(text);
+
                         }
+
                     };
+
                     numberFormatter.setValueClass(Integer.class);
                     numberFormatter.setAllowsInvalid(true);
                     numberFormatter.setMinimum(1);
@@ -137,25 +201,36 @@ public class Window {
                 segmentLayouts[i / this.size][j / this.size].add(fieldLayout);
 
             }
+
         }
 
         for (JPanel[] segmentLayoutRow : segmentLayouts) {
+
             for (JPanel segment : segmentLayoutRow) {
+
                 boardLayout.add(segment);
+
             }
+
         }
 
         body.add(boardLayout);
 
         JPanel buttonLayout = createButtonLayout();
-
         body.add(buttonLayout);
 
         return body;
 
     }
 
+    /**
+     * Constructs and configures the menu panel for the Sudoku game.
+     * The menu includes options for setting the player's nickname, grid size, difficulty level, and starting the game.
+     *
+     * @return The JPanel representing the constructed menu panel with interactive components for game setup.
+     */
     private JPanel createMenu() {
+
         JPanel login = new JPanel();
 
         login.setLayout(null);
@@ -187,16 +262,20 @@ public class Window {
         JButton two = new JButton("2x2");
         two.setBounds(10, 235, 50, 50);
         two.addActionListener(e -> {
+
             this.size = 2;
             this.fullSize = this.size * this.size;
+
         });
         login.add(two);
 
         JButton three = new JButton("3x3");
         three.setBounds(70, 235, 50, 50);
         three.addActionListener(e -> {
+
             this.size = 3;
             this.fullSize = this.size * this.size;
+
         });
         login.add(three);
 
@@ -208,41 +287,52 @@ public class Window {
         JButton easyButton = new JButton("EASY");
         easyButton.setBounds(10, 325, 80, 50);
         easyButton.addActionListener(e -> {
+
             difficulty = 0.3;
             System.out.println(difficulty);
+
         });
         login.add(easyButton);
 
         JButton middleButton = new JButton("MIDDLE");
         middleButton.setBounds(100, 325, 80, 50);
         middleButton.addActionListener(e -> {
+
             difficulty = 0.5;
             System.out.println(difficulty);
+
         });
         login.add(middleButton);
 
         JButton hardButton = new JButton("HARD");
         hardButton.setBounds(190, 325, 80, 50);
         hardButton.addActionListener(e -> {
+
             difficulty = 1.0;
             System.out.println(difficulty);
+
         });
         login.add(hardButton);
 
         JButton startButton = new JButton("START");
         startButton.setBounds(10, 420, 464, 100);
         startButton.addActionListener(e -> {
-            try {
-                nickname = nickTextField.getText();
-            } catch (Exception error) {
+
+            if (nickTextField.getText().isEmpty()) {
+
                 nickname = "Player";
+
+            } else {
+
+                nickname = nickTextField.getText();
+
             }
 
             this.menu.setVisible(false);
             this.grid = createGrid();
             this.window.add(grid);
-
             this.grid.setVisible(true);
+
         });
         login.add(startButton);
 
@@ -250,7 +340,14 @@ public class Window {
 
     }
 
-
+    /**
+     * Creates and configures a panel layout containing buttons for game interaction.
+     * Includes buttons for starting a new game, submitting the Sudoku solution,
+     * clearing the input fields, and exiting the game.
+     * This Panel is added underneath the grid.
+     *
+     * @return JPanel containing buttons for game control and interaction
+     */
     private JPanel createButtonLayout() {
         JPanel buttonLayout = new JPanel(new GridLayout(1, 4, 10, 0));
         buttonLayout.setPreferredSize(new Dimension(500, 70));
@@ -259,6 +356,7 @@ public class Window {
         newButton.setText("New Game");
         newButton.setMnemonic(KeyEvent.VK_N);
         newButton.addActionListener(e -> {
+
             this.window.remove(grid);
             this.grid = createGrid();
             this.window.add(grid);
@@ -266,6 +364,7 @@ public class Window {
             this.window.revalidate();
             this.window.repaint();
             System.out.println("New Game button pressed");
+
         });
         buttonLayout.add(newButton);
 
@@ -278,6 +377,7 @@ public class Window {
             boolean success = true;
 
             outer_loop: for (int i = 0; i < this.fullSize; i++) {
+
                 for (int j = 0; j < this.fullSize; j++) {
 
                     Component component = this.boardFields[i][j].getComponents()[0];
@@ -305,16 +405,26 @@ public class Window {
 
             }
             if (success) {
+
                 boolean valid = validator(numberField);
                 createMessage(valid);
+
                 if (valid) {
+
                     System.out.println("Success");
+
                 } else {
+
                     System.out.println("Failed");
+
                 }
+
             } else {
+
                 System.out.println("Not filled out");
+
             }
+
             System.out.println("Submit button pressed");
 
         });
@@ -324,9 +434,11 @@ public class Window {
         clearButton.setText("Clear Field");
         clearButton.setMnemonic(KeyEvent.VK_C);
         clearButton.addActionListener(e -> {
+
             System.out.println("Clear button pressed");
 
             for (JPanel[] containerRow : this.boardFields) {
+
                 for (JPanel container : containerRow) {
 
                     Component component = container.getComponents()[0];
@@ -338,6 +450,7 @@ public class Window {
                     }
 
                 }
+
             }
 
         });
@@ -360,7 +473,15 @@ public class Window {
 
     }
 
+    /**
+     * Generates a message panel based on the validation of the submitted Sudoku solution.
+     * Displays a message indicating success or failure upon checking the solution.
+     * Allows the user to view the game, start a new game, or exit back to the menu.
+     *
+     * @param valid Indicates whether the submitted Sudoku solution is valid (true for success, false for failure).
+     */
     private void createMessage(boolean valid) {
+
         JPanel message = new JPanel();
         message.setLayout(null);
 
@@ -384,11 +505,13 @@ public class Window {
         viewGame.setBounds(180, 195, 120, 40);
         viewGame.setMnemonic(KeyEvent.VK_V);
         viewGame.addActionListener(e -> {
+
             this.window.remove(message);
             this.grid.setVisible(true);
             this.window.revalidate();
             this.window.repaint();
             System.out.println("View Game button pressed");
+
         });
         message.add(viewGame);
 
@@ -396,6 +519,7 @@ public class Window {
         newGame.setBounds(40, 195, 120, 40);
         newGame.setMnemonic(KeyEvent.VK_N);
         newGame.addActionListener(e -> {
+
             this.window.remove(message);
             this.grid = createGrid();
             this.window.add(grid);
@@ -403,19 +527,24 @@ public class Window {
             this.window.revalidate();
             this.window.repaint();
             System.out.println("New Game button pressed");
+
         });
 
         if (valid) {
+
             bannerMessage = "Congratulations ";
             bannerImage = ("\uD83C\uDFC6");
+
             JLabel trophyLabel = new JLabel(nickname, SwingConstants.CENTER);
             trophyLabel.setBounds(210, 462, 50, 80);
             trophyLabel.setFont(trophyLabel.getFont().deriveFont(Font.BOLD, 10.0f));
             message.add(trophyLabel);
 
-            } else {
+        } else {
+
             bannerMessage = "You Failed";
             bannerImage = ("\uD83D\uDE31");
+
         }
 
         JLabel commitMessage = new JLabel(bannerMessage, SwingConstants.CENTER);
@@ -443,9 +572,17 @@ public class Window {
 
     }
 
+    /**
+     * Validates the Sudoku solution by checking if the number field meets the game's rules.
+     * (no repeated numbers in rows, columns, or sub-grids)
+     *
+     * @param numberField 2D array representing the Sudoku board with values to be validated.
+     * @return True if the provided number field adheres to Sudoku rules, false otherwise.
+     */
     private boolean validator(int[][] numberField) {
 
         for (int i = 0; i < this.fullSize; i++) {
+
             for (int j = 0; j < this.fullSize; j++) {
 
                 int value = numberField[i][j];
@@ -460,9 +597,13 @@ public class Window {
                 }
 
                 for (int k = 0; k < this.fullSize; k++) {
+
                     int number = numberField[k][j];
+
                     if (number == value) {
+
                         return false;
+
                     }
                 }
 
@@ -470,19 +611,28 @@ public class Window {
                 int y = i - (i % this.size);
 
                 for (int k = 0; k < this.size; k++) {
+
                     for (int l = 0; l < this.size; l++) {
+
                         int number = numberField[k + y][l + x];
 
                         if (number == value) {
+
                             return false;
+
                         }
 
                     }
+
                 }
                 numberField[i][j] = value;
 
             }
+
         }
-       return true;
+
+        return true;
+
     }
+
 }
