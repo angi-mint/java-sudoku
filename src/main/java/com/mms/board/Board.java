@@ -29,7 +29,9 @@ public class Board {
      * @param size The size of the Sudoku grid (number of rows/columns in a subgrid).
      */
     public Board(int size) {
+
         setSize(size);
+
     }
 
     /* GETTER AND SETTER */
@@ -41,8 +43,11 @@ public class Board {
      *             a subgrid).
      */
     public void setSize(int size) {
+
         if (size < 1) {
+
             return;
+
         }
 
         this.size = size;
@@ -72,12 +77,19 @@ public class Board {
      * each cell's value to zero.
      */
     private void generateEmptyBoard() {
+
         this.board = new Field[this.fullSize][this.fullSize];
+
         for (int i = 0; i < this.fullSize; i++) {
+
             for (int j = 0; j < this.fullSize; j++) {
+
                 this.board[i][j] = new Field(0);
+
             }
+
         }
+
     }
 
     /**
@@ -93,55 +105,75 @@ public class Board {
         while (true) {
 
             long startTime = System.nanoTime();
-
             generateEmptyBoard();
-
             boolean success = true;
 
             for (int it = 0; it < this.fullSize * this.fullSize; it++) {
 
                 updatePossibleValues(this.board);
                 int[][] possibleValuesArray = new int[this.fullSize * this.fullSize][];
+
                 for (int i = 0; i < this.board.length; i++) {
+
                     for (int j = 0; j < this.board.length; j++) {
+
                         possibleValuesArray[i * this.board.length + j] = this.board[i][j].getPossibleValues();
+
                     }
+
                 }
+
                 Field[] boardArray = to1DArray(this.board);
 
                 int smallest = this.fullSize;
                 int smallestCount = 0;
 
                 for (int i = 0; i < possibleValuesArray.length; i++) {
+
                     int length = possibleValuesArray[i].length;
+
                     if (boardArray[i].getValue() == 0) {
+
                         if (length < smallest) {
+
                             smallest = length;
                             smallestCount = 1;
+
                         } else if (length == smallest) {
+
                             smallestCount++;
+
                         }
+
                     }
+
                 }
 
                 int[] smallestIndex = new int[smallestCount];
                 int counter = 0;
 
                 for (int i = 0; i < possibleValuesArray.length; i++) {
+
                     if (possibleValuesArray[i].length == smallest && boardArray[i].getValue() == 0) {
+
                         smallestIndex[counter] = i;
                         counter++;
+
                     }
+
                 }
 
                 int randomSelection = random.nextInt(smallestIndex.length);
                 int index = smallestIndex[randomSelection];
+
                 if (possibleValuesArray[index].length == 0) {
+
                     success = false;
                     break;
-                }
-                int smallestValue = possibleValuesArray[index][0];
 
+                }
+
+                int smallestValue = possibleValuesArray[index][0];
                 int[] coordinates = indexToCoordinates(index);
                 this.board[coordinates[0]][coordinates[1]].setValue(smallestValue);
 
@@ -153,8 +185,11 @@ public class Board {
             System.out.println("+---===---===---===---===---===---===---+");
 
             if (success) {
+
                 break;
+
             }
+
         }
 
     }
@@ -168,14 +203,15 @@ public class Board {
     public void generatePuzzle(double difficulty) {
 
         final Random random = new Random();
-
         final int fieldsToRemove = ((int) (this.fullSize * this.fullSize * difficulty + 0.5)) / 2;
-        int removedCounter = 0;
         final int halfSize = (int) (this.fullSize * this.fullSize * 0.5 + 0.5);
-
+        int removedCounter = 0;
         int[] indexArray = new int[halfSize];
+
         for (int i = 0; i < indexArray.length; i++) {
+
             indexArray[i] = i;
+
         }
 
         while (true) {
@@ -184,6 +220,7 @@ public class Board {
 
             int index = indexArray[random.nextInt(indexArray.length)];
             int symIndex = this.fullSize * this.fullSize - 1 - index;
+
             int[] coordinate = indexToCoordinates(index);
             int[] symCoordinate = indexToCoordinates(symIndex);
 
@@ -199,24 +236,33 @@ public class Board {
                 updatePossibleValues(solveBoardCopy);
 
                 for (int i = 0; i < solveBoardCopy.length; i++) {
+
                     for (int j = 0; j < solveBoardCopy.length; j++) {
 
                         if (solveBoardCopy[i][j].getValue() == 0) {
+
                             int[] possibleValues = solveBoardCopy[i][j].getPossibleValues();
 
                             if (possibleValues.length == 0) {
+
                                 valid = false;
                                 break outer_loop;
+
                             } else if (possibleValues.length == 1) {
+
                                 solveBoardCopy[i][j].setValue(possibleValues[0]);
                                 continue outer_loop;
+
                             }
+
                         }
 
                     }
+
                 }
 
                 for (int i = 0; i < solveBoardCopy.length; i++) {
+
                     for (int j = 0; j < solveBoardCopy.length; j++) {
 
                         if (solveBoardCopy[i][j].getValue() == 0) {
@@ -227,6 +273,7 @@ public class Board {
                         }
 
                     }
+
                 }
 
                 break;
@@ -234,17 +281,24 @@ public class Board {
             }
 
             if (valid) {
-                this.board = copyBoard(boardCopy);
 
+                this.board = copyBoard(boardCopy);
                 removedCounter++;
+
                 if (removedCounter >= fieldsToRemove) {
+
                     break;
+
                 }
+
             }
+
             indexArray = RemoveArrayElement(indexArray, index);
 
             if (indexArray.length == 0) {
+
                 break;
+
             }
 
         }
@@ -264,9 +318,13 @@ public class Board {
         Field[][] newArray = new Field[array.length][array.length];
 
         for (int i = 0; i < array.length; i++) {
+
             for (int j = 0; j < array[0].length; j++) {
+
                 newArray[i][j] = new Field(array[i][j]);
+
             }
+
         }
 
         return newArray;
@@ -284,10 +342,12 @@ public class Board {
     private Board.Field[] to1DArray(Board.Field[][] array) {
 
         int length = array.length;
-
         Board.Field[] newArray = new Board.Field[length * length];
+
         for (int i = 0; i < length; i++) {
+
             System.arraycopy(array[i], 0, newArray, i * length, length);
+
         }
 
         return newArray;
@@ -323,10 +383,10 @@ public class Board {
     private void updatePossibleValues(Field[][] board) {
 
         for (int i = 0; i < this.fullSize; i++) {
+
             for (int j = 0; j < this.fullSize; j++) {
 
                 Field field = board[i][j];
-
                 int[] possibleValues = new int[1];
 
                 if (field.getValue() != 0) {
@@ -344,39 +404,63 @@ public class Board {
                     }
 
                     for (Field k : board[i]) {
+
                         int value = k.getValue();
+
                         if (value != 0) {
+
                             if (possibleValues.length < 1) {
+
                                 possibleValues = new int[0];
                                 break;
+
                             }
+
                             possibleValues = RemoveArrayElement(possibleValues, value);
+
                         }
+
                     }
 
                     for (int k = 0; k < this.fullSize; k++) {
+
                         int value = board[k][j].getValue();
+
                         if (value != 0) {
+
                             if (possibleValues.length < 1) {
+
                                 possibleValues = new int[0];
                                 break;
+
                             }
+
                             possibleValues = RemoveArrayElement(possibleValues, value);
+
                         }
+
                     }
 
                     int x = j - (j % this.size);
                     int y = i - (i % this.size);
 
                     for (int k = 0; k < this.size; k++) {
+
                         for (int l = 0; l < this.size; l++) {
+
                             int value = board[k + y][l + x].getValue();
+
                             if (value != 0) {
+
                                 if (possibleValues.length < 1) {
+
                                     possibleValues = new int[0];
                                     break;
+
                                 }
+
                                 possibleValues = RemoveArrayElement(possibleValues, value);
+
                             }
 
                         }
@@ -409,14 +493,22 @@ public class Board {
         int counter = 0;
 
         try {
+
             for (int i = 0; i < array.length; i++) {
+
                 if (array[i] != number) {
+
                     newArray[counter] = array[i];
                     counter++;
+
                 }
+
             }
+
         } catch (IndexOutOfBoundsException e) {
+
             return array;
+
         }
 
         return newArray;
