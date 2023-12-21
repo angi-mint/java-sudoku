@@ -7,10 +7,20 @@ import java.util.Random;
  */
 public class Board {
 
+    /**
+     * Determines the number of rows/columns in a single subgrid.
+     */
     private int size;
 
+    /**
+     * Represents the full size of the Sudoku board (size * size).
+     */
     private int fullSize;
 
+    /**
+     * Represents the Sudoku board as a two-dimensional array of Field objects.
+     * Each Field object corresponds to a cell on the Sudoku board.
+     */
     private Field[][] board;
 
     /**
@@ -419,7 +429,14 @@ public class Board {
      */
     private static class Field {
 
+        /**
+         * The value stored in the cell.
+         */
         private int value;
+
+        /**
+         * An array containing possible values for the cell.
+         */
         private int[] possibleValues;
 
         /**

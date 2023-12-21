@@ -15,17 +15,44 @@ import java.text.ParseException;
  */
 public class Window {
 
+    /**
+     * Represents the main frame of the Sudoku game.
+     */
     private final JFrame window;
 
+    /**
+     * Represents the panel containing the Sudoku grid.
+     */
     private JPanel grid;
+
+    /**
+     * Represents the panel containing the menu for game setup and start.
+     */
     private final JPanel menu;
+
+    /**
+     * Represents the matrix of panels forming the Sudoku grid cells.
+     */
     private JPanel[][] boardFields;
 
+    /**
+     * Determines the number of rows/columns in a single subgrid.
+     */
     private int size;
+
+    /**
+     * Represents the full size of the Sudoku board (size * size).
+     */
     private int fullSize;
 
+    /**
+     * Represents the difficulty level of the Sudoku game. (Number between 0-1)
+     */
     private double difficulty;
 
+    /**
+     * Represents the player's nickname used for personalization in the game.
+     */
     private String nickname;
 
     /**

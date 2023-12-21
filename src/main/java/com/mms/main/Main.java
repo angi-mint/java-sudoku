@@ -12,7 +12,6 @@ public class Main {
      *
      * @param args Command-line arguments (not utilized in this application).
      */
-
     public static void main(String[] args) {
 
         new Window();
