@@ -8,9 +8,9 @@ im Fach T1 - Programmierung
 
 ## Projektstruktur
 Das Programm ist in 3 verschiedene Klassen unterteilt:
-- Main.java
-- Board.java
-- Window.java
+- Main.java:    Diese Klasse beinhaltet die main-Methode des Programms und dient als Einstiegspunkt.
+- Board.java:   Diese Klasse ist verantwortlich für die Erstellung eines gültigen Sudoku-Rätsel.
+- Window.java:  Dise Klasse verwaltet die grafischen Elemente und prüft das gelöste Rätsel auf Richtigkeit.
 
 ## Sudoku-Regeln
 *"In der üblichen Version ist es das Ziel, ein 9×9-Gitter mit den Ziffern 1 bis 9 so zu füllen,
