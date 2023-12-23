@@ -29,7 +29,7 @@ in dem bereits mehrere Ziffern vorgegeben sind."*
 ## GUI
 Die grafische Benutzeroberfläche (GUI) des Sudoku-Spiels bietet eine Reihe von Einstellungen und Optionen,
 die es dem Spieler ermöglichen, die Puzzlegröße und den Schwierigkeitsgrad anzupassen. Beim Öffnen des Spiels erscheint zunächst das Einstellungsmenü, sobald ein Spiel gestartet wird, ist das In-Game Menü mit dem Spielfeld zu sehen.
-<img src="assets/sudoku.png">
+<img src="assets/sudoku.png" alt="Example of GUI">
 ### Einstellungsmenü
 - Nickname: Hier kann der Spieler seinen Namen eingeben, der später auf dem Gewinn- und Verlierbildschirm angezeigt wird.
 - Grid Size: Wählt die Größe des Spielfeldes aus, es gibt zwei Optionen:
