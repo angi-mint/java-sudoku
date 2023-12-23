@@ -6,6 +6,9 @@ Projektarbeit ON23B von [angi-mint L.W.](https://github.com/angi-mint),
 [Goetz04 G.H.](https://github.com/Goetz04)
 im Fach T1 - Programmierung
 
+## Javadoc
+Die Javadoc-Dokumentation für dieses Projekt wurde generiert, um eine detaillierte Übersicht über die Klassen, Methoden und Variablen zu bieten. Sie ist verfügbar unter: [Javadoc](https://angi-mint.github.io/java-sudoku/javadoc/index.html)
+
 ## Projektstruktur
 Das Programm ist in 3 verschiedene Klassen unterteilt:
 - Main.java:    Diese Klasse beinhaltet die main-Methode des Programms und dient als Einstiegspunkt.
@@ -22,13 +25,13 @@ in dem bereits mehrere Ziffern vorgegeben sind."*
 
 ## GUI
 Die grafische Benutzeroberfläche (GUI) des Sudoku-Spiels bietet eine Reihe von Einstellungen und Optionen,
-die es dem Spieler ermöglichen, die Puzzlegröße und den Schwierigkeitsgrad anzupassen.
+die es dem Spieler ermöglichen, die Puzzlegröße und den Schwierigkeitsgrad anzupassen. Beim Öffnen des Spiels erscheint zunächst das Einstellungsmenü, sobald ein Spiel gestartet wird, ist das In-Game Menü mit dem Spielfeld zu sehen.
 
 ### Einstellungsmenü
 - Nickname: Hier kann der Spieler seinen Namen eingeben, der später auf dem Gewinn- und Verlierbildschirm angezeigt wird.
 - Grid Size: Wählt die Größe des Spielfeldes aus, es gibt zwei Optionen:
-  - 2x2 (4 Felder)
-  - 3x3 (9 Felder)
+  - 2x2 (16 Felder)
+  - 3x3 (81 Felder)
 - Difficulty: Der Schwierigkeitsgrad bestimmt lediglich, wie viele der ursprünglichen Felder entfernt werden,
   bevor das Spiel beginnt.
   - easy: Ein Drittel der Felder werden entfernt.
