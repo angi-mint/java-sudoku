@@ -3,7 +3,7 @@ package main.java.com.mms.board;
 import java.util.Random;
 
 /**
- * Represents a Sudoku board, managing the generation, modification, and manipulation of the game grid.
+ * Represents a Sudoku board, managing the generation and modification of the game grid.
  */
 public class Board {
 
